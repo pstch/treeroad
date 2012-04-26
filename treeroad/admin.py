@@ -59,7 +59,10 @@ class lineDefinitionAdmin(admin.ModelAdmin):
 class dataDefinitionAdmin(admin.ModelAdmin):
     list_display = ('name','graph','data')
     list_filter = ('graph',)
+<<<<<<< HEAD
     inlines = [lineDefinitionInline,]
+=======
+>>>>>>> branch 'master' of git@github.com:pstch/area13.git
 admin.site.register(domain,domainAdmin)
 admin.site.register(node,nodeAdmin)
 admin.site.register(service,serviceAdmin)
