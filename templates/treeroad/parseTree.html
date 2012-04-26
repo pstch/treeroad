@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>parseTree view</title>
+</head>
+<body>
+    <h1>parseTree Debug Summary {% ifnotequal test 0 %}(Test Mode){% endifnotequal %}</h1>
+    
+    <h2>Domains (skipped {{ skipped_domains }} on {{ found_domains }})</h2>
+    <ul>
+    {% for domain in domains %}
+    <li>
+        Domain: <b>{{ domain.name }}</b>
+    </li>
+    {% endfor %}
+    </ul>
+    
+    <h2>Nodes (skipped {{ skipped_nodes }} on {{ found_nodes }})</h2>
+    <ul>
+    {% for node in nodes %}
+    <li>
+        Node: <b>{{ node.name }}</b> <i>./{{ node.pathPart }}</i>
+    </li>
+    {% endfor %}
+    </ul>
+    
+    <h2>Services (skipped {{ skipped_services }} on {{ found_services }})</h2>
+    <ul>
+    {% for service in services %}
+    <li>
+        Service: <b>{{ service.name }}</b> (@node: {{ service.node }}) <i>./{{service.node.pathPart}}/{{ service.pathPart }}</i>
+    </li>
+    {% endfor %}
+    </ul>
+    
+     <h2>RRD Files (skipped {{ skipped_rrdfiles }} on {{ found_rrdfiles }})</h2>
+    <ul>
+    {% for rrdfile in rrdfiles %}
+    <li>
+        RRD File: <b>{{ rrdfile.pathPart }}</b> (@service: {{ rrdfile.service }}) <i>./{{rrdfile.service.node.pathPart}}/{{ rrdfile.service.pathPart }}/{{ rrdfile.pathPart }}</i>
+    </li>
+    {% endfor %}
+    </ul>
+    
+    <h2>RRD Data Sources (DS) (skipped {{ skipped_datasources }} on {{ found_datasources }})</h2>
+    <ul>
+    {% for datasource in datasources %}
+    <li>
+        DS: <b>{{ datasource.name }}</b> (@rrdfile: {{ datasource.rrdFile.pathPart }}) <i>./{{datasource.rrdFile.service.node.pathPart}}/{{datasource.rrdFile.service.pathPart }}/{{datasource.rrdFile.pathPart }}<b>#{{datasource.name}}</b></i>
+    </li>
+    {% endfor %}
+    </ul>
+    <p>Debug:<code>{{ debug|safe }}</code></p>
+</body>
+</html>
