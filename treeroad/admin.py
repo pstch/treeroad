@@ -49,9 +49,11 @@ class rrdDataSourceAdmin(admin.ModelAdmin):
     list_filter = ('highlight','rrdFile')
     search_fields = ('rrdFile',)
 class lineDefinitionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name','data','description','highlight','color','width')
+    list_filter = ('highlight','data')
 class dataDefinitionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name','graph','data')
+    list_filter = ('graph',)
 admin.site.register(domain,domainAdmin)
 admin.site.register(node,nodeAdmin)
 admin.site.register(service,serviceAdmin)
