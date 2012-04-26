@@ -122,12 +122,13 @@ def parseTree(request, test=1):
                                                           'debug' : _dbg })
 def readRrdInfo(rrdroot,_rrdfile,test):
     path = rrdroot + '/' + _rrdfile.service.node.pathPart + '/' + _rrdfile.service.pathPart + '/' + _rrdfile.pathPart
+    if not path.endswith('.rrd'):
+        return _rrdfile,0,0,[],"<br/>Error @" + path + ": Not an RRD File"
     info = rrdtool.info(str(path))
     keys = info.keys()
     dslist = []
     _dslist = []
     _dbg = ''
-    _dbg += """<br>Testing """ + str(_rrdfile) + " for a DS"
     for key in keys:
         if key.startswith('ds['):
             ds_name = key.split('.')[0][3:-1]

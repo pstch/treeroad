@@ -11,6 +11,10 @@ class rrdDataSourceInline(admin.TabularInline):
     model = rrdDataSource
 class graphInline(admin.TabularInline):
     model = graph
+class dataDefinitionInline(admin.TabularInline):
+    model = dataDefinition
+class lineDefinitionInline(admin.TabularInline):
+    model = lineDefinition
 class domainAdmin(admin.ModelAdmin):
     list_display = ('name','description','highlight')
     list_filter = ('highlight',)
@@ -44,14 +48,18 @@ class graphAdmin(admin.ModelAdmin):
             'fields':  ('template', 'rrdfiles')
         }),
     )
+    inlines = [dataDefinitionInline,]
 class rrdDataSourceAdmin(admin.ModelAdmin):
     list_display = ('name','rrdFile','description','highlight')
     list_filter = ('highlight','rrdFile')
     search_fields = ('rrdFile',)
 class lineDefinitionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name','data','description','highlight','color','width')
+    list_filter = ('highlight','data')
 class dataDefinitionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name','graph','data')
+    list_filter = ('graph',)
+    inlines = [lineDefinitionInline,]
 admin.site.register(domain,domainAdmin)
 admin.site.register(node,nodeAdmin)
 admin.site.register(service,serviceAdmin)

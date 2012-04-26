@@ -42,6 +42,7 @@ class graph(entity):
 class dataDefinition(entity):
     graph = models.ForeignKey(graph)
     data = models.ForeignKey(rrdDataSource)
+    cf = models.CharField(max_length=64)
 class lineDefinition(entity):
     width = models.PositiveSmallIntegerField(default=1)
     data = models.ForeignKey(dataDefinition) # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
