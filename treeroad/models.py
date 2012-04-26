@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 
 # Create your models here.
 class entity(models.Model):
@@ -27,10 +28,13 @@ class service(entity,pathLevel):
     node = models.ForeignKey(node)
 class rrdFile(pathLevel):
     service = models.ForeignKey(service)
-    last_update = models.DateTimeField(blank=True, null=True)
-    def __unicode__(self):
+    lastUpdate = models.DateTimeField(blank=True, null=True)
+    def path(self):
         return './' + self.service.node.pathPart + '/' + self.service.pathPart + '/' + self.pathPart
-class rrdDataSource(entity):
+    def __unicode__(self):
+        return self.path()
+class rrdDataSource(models.Model):
+    name = models.CharField(max_length=64)
     rrdFile = models.ForeignKey(rrdFile)
     def __unicode__(self):
         return './' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.name
@@ -41,11 +45,30 @@ class graph(entity):
     end = models.CharField(max_length=64,default="now")
     width = models.PositiveSmallIntegerField(default=640)
     height = models.PositiveSmallIntegerField(default=480)
-class dataDefinition(entity):
+class dataDefinition(models.Model):
     graph = models.ForeignKey(graph)
     data = models.ForeignKey(rrdDataSource)
-    cf = models.CharField(max_length=64)
-class lineDefinition(entity):
+    cf = models.CharField(max_length=64,default='AVERAGE')
+    lastVname = models.CharField(max_length=64)
+    lastInstruction = models.CharField(max_length=128)
+    def vname(self):
+        return self.data.name + '_' + str(self.id)
+    def defInstruction(self):
+        return 'DEF:' + self.vname() + '=' + self.data.rrdFile.path() + ':' + self.data.name + ':' + self.cf
+    def save(self, *args, **kwargs):
+        super(dataDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
+        self.lastVname = self.vname()
+        self.lastInstruction = self.defInstruction()
+        super(dataDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
+class lineDefinition(models.Model):
+    name = models.CharField(max_length=64)
     width = models.PositiveSmallIntegerField(default=1)
     data = models.ForeignKey(dataDefinition) # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
     color = models.CharField(max_length=7, default='#000000')
+    lastInstruction = models.CharField(max_length=128)
+    def lineInstruction(self):
+        return 'LINE' + str(self.id) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
+    def save(self, *args, **kwargs):
+        super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
+        self.lastInstruction = self.lineInstruction()
+        super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.

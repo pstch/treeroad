@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
 class nodeInline(admin.TabularInline):
@@ -13,8 +14,10 @@ class graphInline(admin.TabularInline):
     model = graph
 class dataDefinitionInline(admin.TabularInline):
     model = dataDefinition
+    readonly_fields = ('lastVname','lastInstruction')
 class lineDefinitionInline(admin.TabularInline):
     model = lineDefinition
+    readonly_fields = ('lastInstruction',)
 class domainAdmin(admin.ModelAdmin):
     list_display = ('name','description','highlight')
     list_filter = ('highlight',)
@@ -28,9 +31,9 @@ class serviceAdmin(admin.ModelAdmin):
     list_filter = ('highlight','node')
     inlines = [rrdFileInline,graphInline]
 class rrdFileAdmin(admin.ModelAdmin):
-    list_display = ('pathPart','service','last_update')
+    list_display = ('pathPart','service','lastUpdate')
     list_filter = ('service',)
-    date_hierarchy = ('last_update')
+    date_hierarchy = ('lastUpdate')
     inlines = [rrdDataSourceInline,]
 class graphAdmin(admin.ModelAdmin):
     list_display = ('name','service','description','highlight')
@@ -48,17 +51,20 @@ class graphAdmin(admin.ModelAdmin):
             'fields':  ('template', 'rrdfiles')
         }),
     )
+    filter_horizontal = ['rrdfiles',]
     inlines = [dataDefinitionInline,]
 class rrdDataSourceAdmin(admin.ModelAdmin):
-    list_display = ('name','rrdFile','description','highlight')
-    list_filter = ('highlight','rrdFile')
+    list_display = ('name','rrdFile')
+    list_filter = ('rrdFile',)
     search_fields = ('rrdFile',)
 class lineDefinitionAdmin(admin.ModelAdmin):
-    list_display = ('name','data','description','highlight','color','width')
-    list_filter = ('highlight','data')
+    list_display = ('name','data','color','width')
+    list_filter = ('data',)
+    readonly_fields = ('lastInstruction',)
 class dataDefinitionAdmin(admin.ModelAdmin):
-    list_display = ('name','graph','data')
+    list_display = ('data','graph','lastVname','lastInstruction')
     list_filter = ('graph',)
+    readonly_fields = ('lastVname','lastInstruction')
     inlines = [lineDefinitionInline,]
 admin.site.register(domain,domainAdmin)
 admin.site.register(node,nodeAdmin)
