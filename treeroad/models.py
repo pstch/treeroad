@@ -32,6 +32,8 @@ class rrdFile(pathLevel):
         return './' + self.service.node.pathPart + '/' + self.service.pathPart + '/' + self.pathPart
 class rrdDataSource(entity):
     rrdFile = models.ForeignKey(rrdFile)
+    def __unicode__(self):
+        return './' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.name
 class graph(entity):
     service = models.ForeignKey(service)
     rrdfiles = models.ManyToManyField(rrdFile,blank=True,null=True) # optional. Used to filter the list of rrdDataSources in the dataDef admin form.
