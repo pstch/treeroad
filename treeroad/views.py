@@ -2,11 +2,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 import rrdtool
+import datetime
 
 from os import path
 from os import listdir
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource
-
+def servInfo(request):
+    return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv (192.168.2.233:8000)', 
+                                                          'date' : datetime.datetime.now(),
+                                                          'meta' : request.META})
 def parseTree(request, test=1):
     from django.conf import settings
     
