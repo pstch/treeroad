@@ -149,3 +149,7 @@ LOGGING = {
 # Directory containing .rrd files
 # The first level of descendance should be the nodes
 RRDROOT = "/var/lib/collectd/rrd"
+
+# Remind to add default values for the models fields.
+# DEFAULT_* = $
+
