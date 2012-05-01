@@ -44,8 +44,9 @@ class graph(entity):
     end = models.CharField(max_length=64,default="now")
     width = models.PositiveSmallIntegerField(default=640)
     height = models.PositiveSmallIntegerField(default=480)
+    path = models.CharField(max_length=64, blank=True, null=True)
 class dataDefinition(models.Model):
-    graph = models.ForeignKey(graph)
+    graph = models.ForeignKey(graph, related_name="defs")
     data = models.ForeignKey(rrdDataSource)
     cf = models.CharField(max_length=64,default='AVERAGE')
     lastVname = models.CharField(max_length=64)
@@ -62,7 +63,7 @@ class dataDefinition(models.Model):
 class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
     width = models.PositiveSmallIntegerField(default=1)
-    data = models.ForeignKey(dataDefinition) # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
+    data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
     color = models.CharField(max_length=7, default='#000000')
     lastInstruction = models.CharField(max_length=128)
     def lineInstruction(self):
