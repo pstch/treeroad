@@ -3,7 +3,7 @@ import rrdtool
 from treeroad.models import graph
 
 def parseGraphOptions(graph):
-    return ""
+    return ("--img-format","png")
 
 def parseDataDefs(defs):
     ret = []
@@ -21,10 +21,11 @@ def parseLineDefs(defs):
 def drawGraph(graph):
     if not graph.path:
         return None
+    if not graph.active:
+        return None
     options = []
     options.append(parseGraphOptions(graph))
     options.append(parseDataDefs(graph.defs.all()))
-    
     rrdtool.graph(graph.path,*options)
 def graphTask():
     graphs = graph.objects.all()
