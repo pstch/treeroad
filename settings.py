@@ -150,6 +150,8 @@ LOGGING = {
 # The first level of descendance should be the nodes
 RRDROOT = "/var/lib/collectd/rrd"
 
+PNGROOT = "/home/test/exports/area13/graphs"
+
 # Remind to add default values for the models fields.
 # DEFAULT_* = $
 
