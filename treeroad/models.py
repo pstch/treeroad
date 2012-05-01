@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class entity(models.Model):
@@ -44,7 +45,12 @@ class graph(entity):
     end = models.CharField(max_length=64,default="now")
     width = models.PositiveSmallIntegerField(default=640)
     height = models.PositiveSmallIntegerField(default=480)
-    path = models.CharField(max_length=64, blank=True, null=True)
+    path = models.CharField(max_length=64, blank=True, null=False)
+    def save(self, *args, **kwargs):
+        super(dataDefinition, self).save(*args,**kwargs)
+        if not self.path:
+            self.path = settings.PNGROOT + '/' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.nam
+        super(dataDefinition, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
     data = models.ForeignKey(rrdDataSource)
