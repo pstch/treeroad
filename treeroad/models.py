@@ -47,6 +47,7 @@ class graph(entity):
     height = models.PositiveSmallIntegerField(default=480)
     path = models.CharField(max_length=64, blank=True, null=False)
     active = models.BooleanField(default=True)
+    lastCommandLine = models.CharField(max_length=64)
     def save(self, *args, **kwargs):
         super(dataDefinition, self).save(*args,**kwargs)
         if not self.path:
