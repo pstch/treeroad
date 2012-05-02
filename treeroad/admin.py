@@ -53,7 +53,7 @@ class graphAdmin(admin.ModelAdmin):
         }),
         ('Computed paths/slugs/cmdlines', {
             'classes': ('collapse',),
-            'fields':  ('codename','id','path','lastCmdLine')
+            'fields':  ('codename','path','lastCommandLine')
         }))
         
     filter_horizontal = ['rrdfiles',]

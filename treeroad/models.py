@@ -48,11 +48,10 @@ class graph(entity):
     height = models.PositiveSmallIntegerField(default=480)
     path = models.CharField(max_length=64, blank=True, null=False)
     active = models.BooleanField(default=True)
-    lastCommandLine = models.CharField(max_length=64)
+    lastCommandLine = models.CharField(max_length=64, blank=True, null=False)
     def save(self, *args, **kwargs):
         super(graph, self).save(*args,**kwargs)
-        if not self.path:
-                self.path = settings.PNGROOT + '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
+        self.path = settings.PNGROOT + '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
         super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
