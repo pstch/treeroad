@@ -29,6 +29,7 @@ def drawGraph(graph):
     graph.lastCommandLine = options
 def graphTask():
     graphs = graph.objects.all()
+    count = len(graphs)
     fails = []
     done = []
     for graphItem in graphs:
@@ -36,6 +37,7 @@ def graphTask():
             fails.append(graphItem)
         else:
             done.append(done)
+    return done, fails, count
 
     
     
