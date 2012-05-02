@@ -38,6 +38,7 @@ class rrdFileAdmin(admin.ModelAdmin):
 class graphAdmin(admin.ModelAdmin):
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
+    prepopulated_fields = ('codename',)
     fieldsets = (
                 (None , {
     'fields': ('name', 'service', 'description', 'highlight')

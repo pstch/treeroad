@@ -39,6 +39,7 @@ class rrdDataSource(models.Model):
     def __unicode__(self):
         return './' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.name
 class graph(entity):
+    codename = models.SlugField()
     service = models.ForeignKey(service)
     rrdfiles = models.ManyToManyField(rrdFile,blank=True,null=True) # optional. Used to filter the list of rrdDataSources in the dataDef admin form.
     start = models.CharField(max_length=64,default="now-2h")
@@ -51,7 +52,7 @@ class graph(entity):
     def save(self, *args, **kwargs):
         super(graph, self).save(*args,**kwargs)
         if not self.path:
-            self.path = settings.PNGROOT + '/' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.nam
+                self.path = settings.PNGROOT + '/' + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.codename + '-' + self.id +  '.png'
         super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
