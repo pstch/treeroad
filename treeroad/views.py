@@ -151,3 +151,8 @@ def readRrdInfo(rrdroot,_rrdfile,test):
         else:
             skip += 1
     return (_rrdfile,skip,found,_dslist,_dbg)
+def graphTaskView(request):
+    from treeroad.tasks import graphTask
+    done, fails = graphTask()
+    return render_to_response("treeroad/graphTask.html", { 'done' : done,
+                                                           'fails' : fails})
