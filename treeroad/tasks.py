@@ -21,12 +21,12 @@ def parseLineDefs(defs):
 def drawGraph(graph):
     if not graph.path:
         return None
-    if not graph.active:
-        return None
     options = []
     options.append(parseGraphOptions(graph))
     options.append(parseDataDefs(graph.defs.all()))
-    rrdtool.graph(graph.path,*options)
+    if graph.active:
+        rrdtool.graph(graph.path,*options)
+    graph.lastCommandLine = options
 def graphTask():
     graphs = graph.objects.all()
     fails = []
