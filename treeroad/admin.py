@@ -38,7 +38,7 @@ class rrdFileAdmin(admin.ModelAdmin):
 class graphAdmin(admin.ModelAdmin):
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
-    prepopulated_fields = ('codename',)
+    prepopulated_fields = {"codename": ('name',)}
     fieldsets = (
                 (None , {
     'fields': ('name', 'service', 'description', 'highlight')
@@ -51,7 +51,10 @@ class graphAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields':  ('template', 'rrdfiles')
         }),
-    )
+        ('Computed paths/slugs/cmdlines'), {
+            'classes': ('collapse',),
+            'fields':  ('codename','id','path','lastCmdLine')
+        })
     filter_horizontal = ['rrdfiles',]
     inlines = [dataDefinitionInline,]
 class rrdDataSourceAdmin(admin.ModelAdmin):
