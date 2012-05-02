@@ -52,7 +52,7 @@ class graph(entity):
     def save(self, *args, **kwargs):
         super(graph, self).save(*args,**kwargs)
         if not self.path:
-                self.path = settings.PNGROOT + '/' + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.codename + '-' + self.id +  '.png'
+                self.path = settings.PNGROOT + '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
         super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
