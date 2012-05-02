@@ -49,10 +49,10 @@ class graph(entity):
     active = models.BooleanField(default=True)
     lastCommandLine = models.CharField(max_length=64)
     def save(self, *args, **kwargs):
-        super(dataDefinition, self).save(*args,**kwargs)
+        super(graph, self).save(*args,**kwargs)
         if not self.path:
             self.path = settings.PNGROOT + '/' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.nam
-        super(dataDefinition, self).save(*args,**kwargs)
+        super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
     data = models.ForeignKey(rrdDataSource)
