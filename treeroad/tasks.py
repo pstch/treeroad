@@ -1,14 +1,14 @@
 # Graph tasks
-import rrdtool
+import rrdtool, os
 from treeroad.models import graph
 
 def parseGraphOptions(graph):
-    return ["--imgformat","png"]
+    return ["--imgformat","PNG"]
 
 def parseDataDefs(defs):
     ret = []
     for definition in defs:
-        ret.append(str(definition))
+        ret.append(definition.defInstruction())
         subdefs = parseLineDefs(definition.defs.all())
         for subdef in subdefs:
             ret.append(subdef)
@@ -17,17 +17,27 @@ def parseDataDefs(defs):
 def parseLineDefs(defs):
     ret = []
     for definition in defs:
-        ret.append(str(definition))
+        ret.append(definition.defInstruction())
     return ret
 
 def drawGraph(graph):
     if not graph.path:
         return None
     options = []
-    options.append(parseGraphOptions(graph))
-    options.append(parseDataDefs(graph.defs.all()))
+    for option in parseGraphOptions(graph):
+        options.append(str(option))
+    for option in parseDataDefs(graph.defs.all()):
+        options.append(str(option))
     if graph.active:
-        rrdtool.graph(str(graph.path),*options)
+        from django.conf import settings
+        if hasattr(settings,'RRDROOT'):
+            os.chdir(settings.RRDROOT)
+        if not os.path.exists(os.path.dirname(graph.path)):
+            os.makedirs(os.path.dirname(graph.path))
+        if rrdtool.graph(str(graph.path),*options):
+            return True
+        else:
+            return False
     graph.lastCommandLine = options
 def graphTask():
     graphs = graph.objects.all()

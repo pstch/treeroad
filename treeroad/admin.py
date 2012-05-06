@@ -39,6 +39,7 @@ class graphAdmin(admin.ModelAdmin):
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
+    readonly_fields = ('path','lastCommandLine')
     fieldsets = (
         (None , {
             'fields': ('name', 'service', 'description', 'highlight')
