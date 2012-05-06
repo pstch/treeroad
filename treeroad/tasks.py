@@ -35,10 +35,14 @@ def drawGraph(graph):
         if not os.path.exists(os.path.dirname(graph.path)):
             os.makedirs(os.path.dirname(graph.path))
         if rrdtool.graph(str(graph.path),*options):
+            graph.lastCommandLine = options
+            graph.save()
             return True
         else:
+            graph.lastCommandLine = options
+            graph.save()
             return False
-    graph.lastCommandLine = options
+    
 def graphTask():
     graphs = graph.objects.all()
     count = len(graphs)
