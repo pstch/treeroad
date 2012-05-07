@@ -1,12 +1,16 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.template import RequestContext
+
 import rrdtool
 import datetime
 
 from os import path
 from os import listdir
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource
+
+
 def servInfo(request):
     return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv (192.168.2.233:8000)', 
                                                           'date' : datetime.datetime.now(),
@@ -123,7 +127,10 @@ def parseTree(request, test=1):
                                                           'skipped_datasources' : skipped_datasources,
                                                           'found_datasources' : found_datasources,
                                                           'test' : test,
-                                                          'debug' : _dbg })
+                                                          'debug' : _dbg },
+                              RequestContext(request, {}))
+def syncTree(request):
+    return parseTree(request, 0)
 def readRrdInfo(rrdroot,_rrdfile,test):
     path = rrdroot + '/' + _rrdfile.service.node.pathPart + '/' + _rrdfile.service.pathPart + '/' + _rrdfile.pathPart
     if not path.endswith('.rrd'):
