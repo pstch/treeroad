@@ -1,0 +1,10 @@
+TreeRoad readme file
+--------------------
+7/05/2012
+
+TreeRoad is a Django-based manager for rrdfiles. It can parse the collectd arborescence and initiate graph jobs.
+https://github.com/pstch/treeroad
+
+Dependencies :
+	- adminplus installed and in INSTALLED_APPS (settings.py)
+	
