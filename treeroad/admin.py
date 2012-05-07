@@ -1,6 +1,10 @@
 from django.contrib import admin
+from adminplus import AdminSitePlus
 
+from treeroad.views import parseTree, syncTree
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
+
+admin.site = AdminSitePlus()
 
 class nodeInline(admin.TabularInline):
     model = node
@@ -50,14 +54,12 @@ class graphAdmin(admin.ModelAdmin):
         }),
         ('Options', {
             'classes': ('collapse',),
-            'fields':  ('template', 'rrdfiles')
+            'fields':  ('template',)
         }),
         ('Computed paths/slugs/cmdlines', {
             'classes': ('collapse',),
             'fields':  ('codename','path','lastCommandLine')
         }))
-        
-    filter_horizontal = ['rrdfiles',]
     inlines = [dataDefinitionInline,]
 class rrdDataSourceAdmin(admin.ModelAdmin):
     list_display = ('name','rrdFile')
@@ -72,6 +74,7 @@ class dataDefinitionAdmin(admin.ModelAdmin):
     list_filter = ('graph',)
     readonly_fields = ('lastVname','lastInstruction')
     inlines = [lineDefinitionInline,]
+
 admin.site.register(domain,domainAdmin)
 admin.site.register(node,nodeAdmin)
 admin.site.register(service,serviceAdmin)
@@ -80,3 +83,6 @@ admin.site.register(rrdFile,rrdFileAdmin)
 admin.site.register(rrdDataSource,rrdDataSourceAdmin)
 admin.site.register(lineDefinition,lineDefinitionAdmin)
 admin.site.register(dataDefinition,dataDefinitionAdmin)
+
+admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database')
+admin.site.register_view('parse', parseTree, 'Lookup data sources')
