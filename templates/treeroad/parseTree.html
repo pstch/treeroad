@@ -1,11 +1,9 @@
-<html>
-<head>
-    <title>parseTree view</title>
-</head>
-<body>
-    <h1>parseTree Debug Summary {% ifnotequal test 0 %}(Test Mode){% endifnotequal %}</h1>
-    
-    <h2>Domains (skipped {{ skipped_domains }} on {{ found_domains }})</h2>
+{% extends "adminplus/base.html" %}
+
+{% block title %}parseTree{% endblock %}
+
+{% block content %}
+<h2>Domains (skipped {{ skipped_domains }} on {{ found_domains }})</h2>
     <ul>
     {% for domain in domains %}
     <li>
@@ -50,5 +48,4 @@
     {% endfor %}
     </ul>
     <p>Debug:<code>{{ debug|safe }}</code></p>
-</body>
-</html>
+{% endblock %}
