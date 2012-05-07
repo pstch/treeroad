@@ -41,7 +41,6 @@ class rrdDataSource(models.Model):
 class graph(entity):
     codename = models.SlugField()
     service = models.ForeignKey(service)
-    rrdfiles = models.ManyToManyField(rrdFile,blank=True,null=True) # optional. Used to filter the list of rrdDataSources in the dataDef admin form.
     start = models.CharField(max_length=64,default="now-2h")
     end = models.CharField(max_length=64,default="now")
     width = models.PositiveSmallIntegerField(default=640)
@@ -74,9 +73,9 @@ class lineDefinition(models.Model):
     data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
     color = models.CharField(max_length=7, default='#000000')
     lastInstruction = models.CharField(max_length=128)
-    def lineInstruction(self):
+    def defInstruction(self):
         return 'LINE' + str(self.id) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
     def save(self, *args, **kwargs):
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
-        self.lastInstruction = self.lineInstruction()
+        self.lastInstruction = self.defInstruction()
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
