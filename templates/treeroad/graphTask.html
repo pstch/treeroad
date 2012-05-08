@@ -1,11 +1,10 @@
-<html>
-<head>
-    <title>graphTask view</title>
-</head>
-<body>
+{% extends "adminplus/base.html" %}
+
+{% block title %}graphTask{% endblock %}
+{% block content %}
 <h1>graphTaskView debug</h1>
 <p>Tried : {{ count }}</p>
 <p>Done: {{ done }}</p>
 <p>Fails: {{ fails }}</p>
-</body>
+{% endblock %}
 </html>
