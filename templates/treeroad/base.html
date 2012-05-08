@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css">
+    
+    </style>
+    <title>{% block title %}TreeRoad{% endblock %}</title>
+</head>
+
+<body>
+    <div id="navBar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="./overview">Overview</a></li>
+            <li><a href="./nodes/">Nodes</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
