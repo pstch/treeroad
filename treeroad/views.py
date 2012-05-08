@@ -2,14 +2,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
-import rrdtool
 import datetime
 
 from os import path
 from os import listdir
-from treeroad.models import domain, node, service, rrdFile, rrdDataSource
-
+from treeroad.models import domain, node, service, rrdFile
+from treeroad.rrdfuncs import readRrdInfo
 
 def servInfo(request):
     return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv (192.168.2.233:8000)', 
@@ -131,33 +129,6 @@ def parseTree(request, test=1):
                               RequestContext(request, {}))
 def syncTree(request):
     return parseTree(request, 0)
-def readRrdInfo(rrdroot,_rrdfile,test):
-    path = rrdroot + '/' + _rrdfile.service.node.pathPart + '/' + _rrdfile.service.pathPart + '/' + _rrdfile.pathPart
-    if not path.endswith('.rrd'):
-        return _rrdfile,0,0,[],"<br/>Error @" + path + ": Not an RRD File"
-    info = rrdtool.info(str(path))
-    keys = info.keys()
-    dslist = []
-    _dslist = []
-    _dbg = ''
-    for key in keys:
-        if key.startswith('ds['):
-            ds_name = key.split('.')[0][3:-1]
-            try:
-                dslist.index(ds_name)
-            except ValueError:
-                dslist.append(ds_name)
-    found = len(dslist)
-    skip = 0
-    for ds in dslist:
-        if not rrdDataSource.objects.filter(rrdFile=_rrdfile,name=ds):
-            _ds = rrdDataSource(name=ds,rrdFile=_rrdfile)
-            _dslist.append(_ds)
-            if not test:
-                _ds.save()
-        else:
-            skip += 1
-    return (_rrdfile,skip,found,_dslist,_dbg)
 def graphTaskView(request):
     from treeroad.tasks import graphTask
     done, fails, count = graphTask()
