@@ -6,7 +6,7 @@ import datetime
 
 from os import path
 from os import listdir
-from treeroad.models import domain, node, service, rrdFile
+from treeroad.models import domain, node, service, rrdFile, graph
 from treeroad.rrdfuncs import readRrdInfo
 
 def servInfo(request):
@@ -135,3 +135,17 @@ def graphTaskView(request):
     return render_to_response("treeroad/graphTask.html", { 'done' : done,
                                                            'fails' : fails,
                                                            'count' : count})
+def overView(request):
+    graphCount = graph.objects.count()
+    rrdFileCount = rrdFile.objects.count()
+    serviceCount = service.objects.count()
+    nodeCount = node.objects.count()
+    host = request.meta['HTTP_HOST']
+    date = datetime.datetime.isoformat()
+    # more
+    return render_to_response("treeroad/overView.html", { 'graphCount' : graphCount,
+                                                          'rrdFileCount' : rrdFileCount,
+                                                          'serviceCount' : serviceCount,
+                                                          'nodeCount' : nodeCount,
+                                                          'host' : host,
+                                                          'date' : date})
