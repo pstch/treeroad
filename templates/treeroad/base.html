@@ -2,19 +2,27 @@
 <html lang="en">
 <head>
     <style type="text/css">
-    
+    {% include 'treeroad/style.css' %}
     </style>
     <title>{% block title %}TreeRoad{% endblock %}</title>
 </head>
 
 <body>
-    <div id="navBar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="./overview">Overview</a></li>
-            <li><a href="./nodes/">Nodes</a></li>
-        </ul>
-        {% endblock %}
+	<div id="blackBar"></div>
+	<div id="header">
+		<div id="blackBar"></div>
+		<h1>TreeRoad</h1>
+    	<div id="nav">
+        	{% block sidebar %}
+        	<ul>
+            	<li><a href="/treeroad/overView">Overview</a></li>
+            	<li><a href="/treeroad/nodes">Nodes</a></li>
+            	<li><a href="/treeroad/servInfo">Server info</a></li>
+            	<li><a href="/admin/">Admin</a></li>
+        	</ul>
+        	{% endblock %}
+        </div>
+        <div id="infos">{{ date }}</div>
     </div>
 
     <div id="content">
