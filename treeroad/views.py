@@ -141,8 +141,8 @@ def overView(request):
     rrdFileCount = rrdFile.objects.count()
     serviceCount = service.objects.count()
     nodeCount = node.objects.count()
-    host = request.meta['HTTP_HOST']
-    date = datetime.datetime.isoformat()
+    host = request.META['HTTP_HOST']
+    date = datetime.datetime.isoformat(datetime.datetime.now())
     # more
     return render_to_response("treeroad/overView.html", { 'graphCount' : graphCount,
                                                           'rrdFileCount' : rrdFileCount,
