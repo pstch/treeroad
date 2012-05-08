@@ -2,4 +2,9 @@
 
 {% block title %}TreeRoad overview{% endblock %}
 
-{% block content %}COUCOU{% endblock %}
+{% block content %}
+<div class="block">
+<h2>Summary</h2>
+<p>This is the TreeRoad instance at <b>{{ host }}</b>. I have {{ graphCount }} graph tasks, taking data from {{ rrdFileCount }} .rrd files, {{ serviceCount }} services, {{ nodeCount}} nodes.
+</div>
+{% endblock %}
