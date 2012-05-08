@@ -6,5 +6,16 @@
 <h1>Welcome to arthur :)</h1>
 <h2>This is host : {{ host }}</h2>
 <p>Date tuple : {{ date }}</p>
-<p>Metadata : <blockquote><p style="font-size:75%;">{{ meta }}</p><</p>
+<p>Metadata : 
+	<blockquote>
+		<p style="font-size:75%;">
+			<ul>
+			{% for key,value in meta.items %}
+			<li><b>{{ key }}</b> : {{ value }}</li>
+			{% endfor %}
+			</ul>
+		</p>
+	</blockquote>
+</p>
+
 {% endblock %}
