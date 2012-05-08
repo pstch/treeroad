@@ -1,0 +1,23 @@
+{% extends "treeroad/base.html" %}
+
+{% block title %}TreeRoad node list{% endblock %}
+
+{% block content %}
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Domain</th>
+    <th>Description</th>
+    <th>Services</th>
+  </tr>
+  {% for node in object_list %}
+  <tr>
+    <td><a href="/treeroad/nodes/{{ node.id }}">{{ node.name }}</a></td>
+    <td>{{ node.domain.name }}</td>
+    <td>{{ node.description }}</td>
+    <td>{{ node.services.all|length }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

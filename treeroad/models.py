@@ -25,9 +25,9 @@ class node(entity,pathLevel):
     domain = models.ForeignKey(domain, blank=True, null=True)
     pass
 class service(entity,pathLevel):
-    node = models.ForeignKey(node)
+    node = models.ForeignKey(node,related_name="services")
 class rrdFile(pathLevel):
-    service = models.ForeignKey(service)
+    service = models.ForeignKey(service,related_name="rrdfiles")
     lastUpdate = models.DateTimeField(blank=True, null=True)
     def path(self):
         return './' + self.service.node.pathPart + '/' + self.service.pathPart + '/' + self.pathPart
@@ -40,7 +40,7 @@ class rrdDataSource(models.Model):
         return './' + self.rrdFile.service.node.pathPart + './' + self.rrdFile.service.pathPart + '/' + self.rrdFile.pathPart + '/' + self.name
 class graph(entity):
     codename = models.SlugField()
-    service = models.ForeignKey(service)
+    service = models.ForeignKey(service,related_name="graphs")
     start = models.CharField(max_length=64,default="now-2h")
     end = models.CharField(max_length=64,default="now")
     width = models.PositiveSmallIntegerField(default=640)

@@ -29,12 +29,12 @@ body > #header > #blackBar {
 body > #header > h1 {
 	display: block;
 	float: left;
-	width: 300px;
+	width: 180px;
 	margin: 10px;
 }
 body > #header > #nav {
 	float: right;
-	width: 400px;
+	width: 560px;
 	height: 20px;
 	
 	margin-right: 20px;
@@ -90,4 +90,39 @@ body > #content > .block {
 	border: 1px solid #ABD;
 	background-color: #CDF;	
 	padding: 5px;
+}
+table
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 10px;
+	width: 760px;
+	text-align: left;
+	border-collapse: collapse;
+}
+table th:first-child {
+	font-weight: bold;
+}
+table th
+{
+	font-size: 13px;
+	font-weight: normal;
+	padding: 8px;
+	background: #b9c9fe;
+	border-top: 4px solid #aabcfe;
+	border-bottom: 1px solid #fff;
+	color: #039;
+}
+table td
+{
+	padding: 8px;
+	background: #e8edff; 
+	border-bottom: 1px solid #fff;
+	color: #669;
+	border-top: 1px solid transparent;
+}
+table tr:hover td
+{
+	background: #d0dafd;
+	color: #339;
 }
