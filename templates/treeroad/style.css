@@ -1,0 +1,93 @@
+body {
+	margin: 0;
+}
+
+body > #blackBar {
+	display: block;
+	background-color: #555;
+	
+	margin-left: 0;
+	margin-right: 0;
+
+	height: 10px;
+}
+body > #header {
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
+	height: 100px;
+	background-color: #DDD;
+}
+body > #header > #blackBar {
+	margin-top: -10px;
+	
+	width: 800px;
+	height: 10px;
+	
+	background-color: #999;	
+}
+body > #header > h1 {
+	display: block;
+	float: left;
+	width: 300px;
+	margin: 10px;
+}
+body > #header > #nav {
+	float: right;
+	width: 400px;
+	height: 20px;
+	
+	margin-right: 20px;
+	margin-top: 0px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	text-align: right;
+}
+#nav > ul {
+	margin: 0;
+	list-style-type: none;
+	font-size: 80%;	
+}
+#nav > ul > li {
+	display: inline-block;
+	height: 15px;
+	width: 80px;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #BBB;
+}
+#nav > ul > li > a {
+	text-decoration: none;
+	color: #333;
+}
+#nav > ul > li:hover {
+	font-weight: bold;
+	background-color: #999;
+}
+#nav > ul > li:hover > a {
+	color: white;
+}
+body > #header > #infos {
+	display: block;
+	width: 780px;
+	height: 20px;
+	text-align: right;
+	font-size: 70%;
+	margin-top: 65px;
+	padding-right: 20px;
+}
+body > #content {
+	width: 778px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	border-left: 1px dotted #DDD;
+	border-right: 1px dotted #DDD;
+}
+body > #content > .block {
+	float: left;
+	border: 1px solid #ABD;
+	background-color: #CDF;	
+	padding: 5px;
+}
