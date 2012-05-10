@@ -4,7 +4,7 @@ from adminplus import AdminSitePlus
 from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
-admin.site = AdminSitePlus()
+#admin.site = AdminSitePlus()
 
 class nodeInline(admin.TabularInline):
     model = node
@@ -84,6 +84,6 @@ admin.site.register(rrdDataSource,rrdDataSourceAdmin)
 admin.site.register(lineDefinition,lineDefinitionAdmin)
 admin.site.register(dataDefinition,dataDefinitionAdmin)
 
-admin.site.register_view('graph', graphTaskView, 'Run graphing task')
-admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database')
-admin.site.register_view('parse', parseTree, 'Lookup data sources')
+#admin.site.register_view('graph', graphTaskView, 'Run graphing task')
+#admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database')
+#admin.site.register_view('parse', parseTree, 'Lookup data sources')

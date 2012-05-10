@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class entity(models.Model):
@@ -17,15 +18,17 @@ class pathLevel(models.Model):
     pathPart = models.CharField(max_length=64)
     class Meta:
         abstract = True
-    
 class domain(entity):
     pass
 
 class node(entity,pathLevel):
     domain = models.ForeignKey(domain, blank=True, null=True)
-    pass
+    def get_absolute_url(self):
+        return reverse('nodeDetail', args = [self.id])
 class service(entity,pathLevel):
     node = models.ForeignKey(node,related_name="services")
+    def get_absolute_url(self):
+        return reverse('serviceDetail', args = [self.id])
 class rrdFile(pathLevel):
     service = models.ForeignKey(service,related_name="rrdfiles")
     lastUpdate = models.DateTimeField(blank=True, null=True)
@@ -48,6 +51,8 @@ class graph(entity):
     path = models.CharField(max_length=64, blank=True, null=False)
     active = models.BooleanField(default=True)
     lastCommandLine = models.CharField(max_length=64, blank=True, null=False)
+    def get_absolute_url(self):
+        return reverse('graphDetail', args = [self.id])
     def save(self, *args, **kwargs):
         super(graph, self).save(*args,**kwargs)
         self.path = settings.PNGROOT + '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
