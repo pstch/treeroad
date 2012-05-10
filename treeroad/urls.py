@@ -3,8 +3,8 @@ from django.views.generic import ListView, DetailView
 from treeroad.models import node, service, graph
 
 urlpatterns = patterns('',
+    url(r'^$', 'treeroad.views.overView'),
     url(r'^servInfo/$', 'treeroad.views.servInfo'),
-    url(r'^overView$', 'treeroad.views.overView'),
     
     url(r'^nodes/$', ListView.as_view(model=node)),
     url(r'^nodes/(?P<pk>\d+)$', DetailView.as_view(model=node)),
