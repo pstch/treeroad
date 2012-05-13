@@ -63,6 +63,7 @@ class dataDefinition(models.Model):
     cf = models.CharField(max_length=64,default='AVERAGE')
     lastVname = models.CharField(max_length=64)
     lastInstruction = models.CharField(max_length=128)
+    template = models.BooleanField(default=False)
     def vname(self):
         return self.data.name + '_' + str(self.id)
     def defInstruction(self):
@@ -72,6 +73,8 @@ class dataDefinition(models.Model):
         self.lastVname = self.vname()
         self.lastInstruction = self.defInstruction()
         super(dataDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
+    def __unicode__(self):
+        return str(self.data)
 class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
     width = models.PositiveSmallIntegerField(default=1)

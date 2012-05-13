@@ -1,10 +1,32 @@
 from django.contrib import admin
-from adminplus import AdminSitePlus
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from adminplus import AdminSitePlus #@UnresolvedImport
 
+from django import forms
 from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
 #admin.site = AdminSitePlus()
+
+class graphForm(forms.ModelForm):
+    class Meta:
+        model = graph
+
+    dataDefinitions = forms.ModelMultipleChoiceField(
+                        queryset=dataDefinition.objects.filter(template=True),
+                        required=False,
+                        widget=FilteredSelectMultiple('Data definitions to create',False))
+
+    def __init__(self, *args, **kwargs):
+        super(graphForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['dataDefinitions'].initial = None
+    def save(self, *args, **kwargs):
+        # FIXME: 'commit' argument is hot handled
+        instance = super(graphForm, self).save(commit=False)
+        self.fields['dataDefinitions'].initial.update(graph=None)
+        #self.cleaned_data['dataDefinitions'].update(graph=instance)
+        return instance
 
 class nodeInline(admin.TabularInline):
     model = node
@@ -40,6 +62,7 @@ class rrdFileAdmin(admin.ModelAdmin):
     date_hierarchy = ('lastUpdate')
     inlines = [rrdDataSourceInline,]
 class graphAdmin(admin.ModelAdmin):
+    form = graphForm
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
@@ -47,6 +70,9 @@ class graphAdmin(admin.ModelAdmin):
     fieldsets = (
         (None , {
             'fields': ('name', 'service', 'description', 'highlight')
+        }),
+        ('Data', {
+                  'fields': ('dataDefinitions',)
         }),
         ('Base graph settings', {
             'classes': ('collapse',),
@@ -60,7 +86,6 @@ class graphAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields':  ('codename','path','lastCommandLine')
         }))
-    inlines = [dataDefinitionInline,]
 class rrdDataSourceAdmin(admin.ModelAdmin):
     list_display = ('name','rrdFile')
     list_filter = ('rrdFile',)
