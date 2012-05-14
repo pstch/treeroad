@@ -6,27 +6,7 @@ from django import forms
 from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
-#admin.site = AdminSitePlus()
-
-class graphForm(forms.ModelForm):
-    class Meta:
-        model = graph
-
-    dataDefinitions = forms.ModelMultipleChoiceField(
-                        queryset=dataDefinition.objects.filter(template=True),
-                        required=False,
-                        widget=FilteredSelectMultiple('Data definitions to create',False))
-
-    def __init__(self, *args, **kwargs):
-        super(graphForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['dataDefinitions'].initial = None
-    def save(self, *args, **kwargs):
-        # FIXME: 'commit' argument is hot handled
-        instance = super(graphForm, self).save(commit=False)
-        self.fields['dataDefinitions'].initial.update(graph=None)
-        #self.cleaned_data['dataDefinitions'].update(graph=instance)
-        return instance
+admin.site = AdminSitePlus()
 
 class nodeInline(admin.TabularInline):
     model = node
@@ -40,9 +20,12 @@ class graphInline(admin.TabularInline):
     model = graph
 class dataDefinitionInline(admin.TabularInline):
     model = dataDefinition
+    extra = 0
     readonly_fields = ('lastVname','lastInstruction')
 class lineDefinitionInline(admin.TabularInline):
     model = lineDefinition
+    extra = 0
+    prepopulated_fields = {"name" : ("data",)}
     readonly_fields = ('lastInstruction',)
 class domainAdmin(admin.ModelAdmin):
     list_display = ('name','description','highlight')
@@ -62,7 +45,6 @@ class rrdFileAdmin(admin.ModelAdmin):
     date_hierarchy = ('lastUpdate')
     inlines = [rrdDataSourceInline,]
 class graphAdmin(admin.ModelAdmin):
-    form = graphForm
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
@@ -71,21 +53,15 @@ class graphAdmin(admin.ModelAdmin):
         (None , {
             'fields': ('name', 'service', 'description', 'highlight')
         }),
-        ('Data', {
-                  'fields': ('dataDefinitions',)
-        }),
         ('Base graph settings', {
             'classes': ('collapse',),
             'fields':  ('width','height','start','end')
-        }),
-        ('Options', {
-            'classes': ('collapse',),
-            'fields':  ('template',)
         }),
         ('Computed paths/slugs/cmdlines', {
             'classes': ('collapse',),
             'fields':  ('codename','path','lastCommandLine')
         }))
+    inlines = (dataDefinitionInline,)
 class rrdDataSourceAdmin(admin.ModelAdmin):
     list_display = ('name','rrdFile')
     list_filter = ('rrdFile',)
@@ -109,6 +85,6 @@ admin.site.register(rrdDataSource,rrdDataSourceAdmin)
 admin.site.register(lineDefinition,lineDefinitionAdmin)
 admin.site.register(dataDefinition,dataDefinitionAdmin)
 
-#admin.site.register_view('graph', graphTaskView, 'Run graphing task')
-#admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database')
-#admin.site.register_view('parse', parseTree, 'Lookup data sources')
+admin.site.register_view('graph', graphTaskView, 'Run graphing task') #@UndefinedVariable
+admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database') #@UndefinedVariable
+admin.site.register_view('parse', parseTree, 'Lookup data sources') #@UndefinedVariable
