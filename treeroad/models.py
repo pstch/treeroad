@@ -75,7 +75,8 @@ class dataDefinition(models.Model):
     def save(self, *args, **kwargs):
         super(dataDefinition, self).save(*args, **kwargs) # Call the "real" save() method. FIXME: This is the wrong way
         if self.defs.count() == 0:
-            line = lineDefinition(name=self.data.rrdFile.pathPart,data=self)
+            _name = str(self.data.rrdFile.pathPart).split('.')[0] + '/' + self.data.name
+            line = lineDefinition(name=_name,data=self)
             line.save()
         self.lastVname = self.vname()
         self.lastInstruction = self.defInstruction()
