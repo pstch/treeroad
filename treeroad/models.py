@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
+
 # Create your models here.
 class entity(models.Model):
     name = models.CharField(max_length=64,blank=True)
@@ -85,7 +86,7 @@ class dataDefinition(models.Model):
         return str(self.data)
 class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
-    width = models.PositiveSmallIntegerField(default=1)
+    width = models.DecimalField(default=0.1, max_digits=2, decimal_places=1)
     data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
     color = models.CharField(max_length=7, default='#000000')
     lastInstruction = models.CharField(max_length=128,blank=True)
