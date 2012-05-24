@@ -23,7 +23,7 @@ def parseLineDefs(defs):
 def drawGraph(graph):
     if not graph.path:
         return None
-    options = []
+    options = ['--start',str(graph.start),'--end',str(graph.end)]
     for option in parseGraphOptions(graph):
         options.append(str(option))
     for option in parseDataDefs(graph.defs.all()):
