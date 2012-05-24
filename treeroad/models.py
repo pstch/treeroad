@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
+from colors import fields
 
 
 # Create your models here.
@@ -59,7 +60,7 @@ class graph(entity):
         if not self.name:
             self.name = str(self.service.name).capitalize()
             self.codename = slugify(self.name)
-        self.path = settings.PNGROOT + '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
+        self.path = '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
         super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
@@ -86,12 +87,12 @@ class dataDefinition(models.Model):
         return str(self.data)
 class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
-    width = models.DecimalField(default=0.1, max_digits=2, decimal_places=1)
+    width = models.DecimalField(default=0.5, max_digits=2, decimal_places=1)
     data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
-    color = models.CharField(max_length=7, default='#000000')
+    color = fields.ColorField(default='#000000')
     lastInstruction = models.CharField(max_length=128,blank=True)
     def defInstruction(self):
-        return 'LINE' + str(self.id) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
+        return 'LINE' + str(self.width) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
     def save(self, *args, **kwargs):
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method. FIXME: This is the wrong way
         self.lastInstruction = self.defInstruction()
