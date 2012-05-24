@@ -33,7 +33,7 @@ def drawGraph(graph):
         if hasattr(settings,'RRDROOT'):
             os.chdir(settings.RRDROOT)
         if not os.path.exists(os.path.dirname(graph.path)):
-            os.makedirs(os.path.dirname(graph.path))
+            os.makedirs(os.path.dirname(settings.PNGROOT + graph.path)) # FIXME: Doesn't work. No errors reported. Reported in Git commit
         if rrdtool.graph(settings.PNGROOT + str(graph.path),*options):
             graph.lastCommandLine = options
             graph.save()
