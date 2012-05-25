@@ -4,8 +4,15 @@ from adminplus import AdminSitePlus #@UnresolvedImport
 from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
+import tasks
+
 admin.site = AdminSitePlus()
 
+def runGraph(modeladmin, request, queryset):
+    for item in queryset:
+        tasks.drawGraph(item)
+runGraph.short_description = "Run graphing task for the selected graphs"
+    
 class nodeInline(admin.TabularInline):
     model = node
 class serviceInline(admin.TabularInline):
@@ -46,6 +53,7 @@ class graphAdmin(admin.ModelAdmin):
     list_display = ('name','service','description','highlight')
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
+    actions = [runGraph]
     readonly_fields = ('path','lastCommandLine')
     fieldsets = (
         (None , {
