@@ -8,9 +8,12 @@ import tasks
 
 admin.site = AdminSitePlus()
 
-def runGraph(modeladmin, request, queryset):
+def runGraph(self, request, queryset):
+    count = 0
     for item in queryset:
         tasks.drawGraph(item)
+        count = count + 1
+    self.message_user(request, "%s graphs done." % count)
 runGraph.short_description = "Run graphing task for the selected graphs"
     
 class nodeInline(admin.TabularInline):
