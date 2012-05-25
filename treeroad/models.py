@@ -100,6 +100,6 @@ class lineDefinition(models.Model):
             import random
             color = '#'
             for i in 1,2,3:
-                color = color + hex(random.randrange(0,255)).split('x')[1]
+                color = color + hex(random.randrange(17,255)).split('x')[1]
             self.color = color
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
