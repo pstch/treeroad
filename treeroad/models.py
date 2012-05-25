@@ -89,11 +89,17 @@ class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
     width = models.DecimalField(default=1, max_digits=2, decimal_places=1)
     data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
-    color = fields.ColorField(default='#000000')
+    color = fields.ColorField(blank=True)
     lastInstruction = models.CharField(max_length=128,blank=True)
     def defInstruction(self):
         return 'LINE' + str(self.width) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
     def save(self, *args, **kwargs):
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method. FIXME: This is the wrong way
         self.lastInstruction = self.defInstruction()
+        if not self.color:
+            import random
+            color = '#'
+            for i in 1,2,3:
+                color = color + hex(random.randrange(0,255)).split('x')[1]
+            self.color = color
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method.
