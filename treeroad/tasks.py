@@ -23,7 +23,7 @@ def parseLineDefs(defs):
 def drawGraph(graph):
     if not graph.path:
         return None
-    options = ['--start',str(graph.start),'--end',str(graph.end)]
+    options = ['--start',str(graph.start),'--end',str(graph.end),'--width',str(graph.width),'--height',str(graph.height)]
     for option in parseGraphOptions(graph):
         options.append(str(option))
     for option in parseDataDefs(graph.defs.all()):
@@ -32,7 +32,7 @@ def drawGraph(graph):
         from django.conf import settings
         if hasattr(settings,'RRDROOT'):
             os.chdir(settings.RRDROOT)
-        if not os.path.exists(os.path.dirname(graph.path)):
+        if not os.path.exists(os.path.dirname(settings.PNGROOT + graph.path)):
             os.makedirs(os.path.dirname(settings.PNGROOT + graph.path)) # FIXME: Doesn't work. No errors reported. Reported in Git commit
         if rrdtool.graph(settings.PNGROOT + str(graph.path),*options):
             graph.lastCommandLine = options
