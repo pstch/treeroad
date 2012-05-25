@@ -1,7 +1,31 @@
 {% extends "treeroad/base.html" %}
 
-{% block title %}TreeRoad - {{ object.name }}{% endblock %}
+{% block title %}TreeRoad - Node detail : {{ object.name }}{% endblock %}
 
 {% block content %}
-{{ object }}
+<div class="block">
+<h1>{{ node.name }} detail</h1>
+<p>
+{{ node.description }}
+</p>
+</div>
+<div class="whiteblock">
+<h2>Service list</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>.rrd files</th>
+    <th>graphs</th>
+  </tr>
+  {% for service in node.services.all %}
+  <tr>
+    <td><a href="/treeroad/service/{{ service.id }}">{{ service.name }}</a></td>
+    <td>{{ service.description }}</td>
+    <td>{{ service.rrdfiles.all|length }}</td>
+    <td>{{ service.graphs.all|length }}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
 {% endblock %}

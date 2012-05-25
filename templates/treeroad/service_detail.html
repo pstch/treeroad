@@ -3,5 +3,31 @@
 {% block title %}TreeRoad - {{ object.name }}{% endblock %}
 
 {% block content %}
-{{ object }}
+<div class="block">
+<h1>{{ service.name }} detail</h1>
+<p>
+{{ service.description }}
+</p>
+</div>
+<div class="whiteblock">
+<h2>Graph list</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Start > End</th>
+    <th>Width x Height</th>
+    <th>Data definitions</th>
+  </tr>
+  {% for graph in service.graphs.all %}
+  <tr>
+    <td><a href="/treeroad/graph/{{ graph.id }}">{{ graph.name }}</a></td>
+    <td>{{ graph.description }}</td>
+    <td>{{ graph.start }} > {{ graph.end }}</td>
+    <td>{{ graph.width }}x{{ graph.height }}</td>
+    <td>{{ graph.defs.all|length }}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
 {% endblock %}

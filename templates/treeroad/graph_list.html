@@ -3,12 +3,17 @@
 {% block title %}TreeRoad graph list{% endblock %}
 
 {% block content %}
+<h1>Graph list</h1>
+<p>{{ object_list|length }} graph{{ object_list|pluralize }}</p>
 <table>
   <tr>
     <th>Name</th>
     <th>Service</th>
     <th>Node</th>
     <th>Path</th>
+    <th>Start > End</th>
+    <th>Width x Height</th>
+    <th>Data definitions</th>
   </tr>
   {% for graph in object_list %}
   <tr>
@@ -16,6 +21,9 @@
     <td>{{ graph.service }}</td>
     <td>{{ graph.service.node }}</td>
     <td>{{ graph.path }}</td>
+    <td>{{ graph.start }} > {{ graph.end }}</td>
+    <td>{{ graph.width }}x{{ graph.height }}</td>
+    <td>{{ graph.defs.all|length }}</td>
   </tr>
   {% endfor %}
 </table>

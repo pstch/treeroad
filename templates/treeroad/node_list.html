@@ -3,6 +3,8 @@
 {% block title %}TreeRoad node list{% endblock %}
 
 {% block content %}
+<h1>Node list</h1>
+<p>{{ object_list|length }} node{{ object_list|pluralize }}</p>
 <table>
   <tr>
     <th>Name</th>
