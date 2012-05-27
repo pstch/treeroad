@@ -1,12 +1,12 @@
 from django.contrib import admin
-from adminplus import AdminSitePlus #@UnresolvedImport
+from treeroad.adminsite import TreeroadAdminSite
 
 from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
 import tasks
 
-admin.site = AdminSitePlus()
+admin.site = TreeroadAdminSite()
 
 def runGraph(self, request, queryset):
     count = 0

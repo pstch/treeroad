@@ -2,11 +2,11 @@ from django.conf.urls.defaults import patterns, include, url
 
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from adminplus import AdminSitePlus
+from treeroad.adminsite import TreeroadAdminSite
 from django.conf import settings
 from django.conf.urls.static import static
 
-#admin.site = AdminSitePlus()
+admin.site = TreeroadAdminSite()
 admin.autodiscover()
 
 urlpatterns = patterns('',

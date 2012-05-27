@@ -23,7 +23,7 @@
     <td><a href="/treeroad/service/{{ service.id }}">{{ service.name }}</a></td>
     <td>{{ service.description }}</td>
     <td>{{ service.rrdfiles.all|length }}</td>
-    <td>{{ service.graphs.all|length }}</td>
+    <td>{% ifnotequal service.graphs.all|length 0 %}<font color="green"><b>{{ service.graphs.all|length }}</b></font>{% else %}{{ service.graphs.all|length }}{% endifnotequal %}</td>
   </tr>
   {% endfor %}
 </table>
