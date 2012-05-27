@@ -1,5 +1,5 @@
 # Code from : https://github.com/jsocol/django-adminplus
-
+# License ref in LICENSE
 from django.contrib.admin.sites import AdminSite
 from django.utils.text import capfirst
 
