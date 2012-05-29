@@ -5,6 +5,8 @@ from treeroad.views import parseTree, syncTree, graphTaskView
 from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph, dataDefinition, lineDefinition
 
 import tasks
+from django import forms
+from django.forms.widgets import Select
 
 admin.site = TreeroadAdminSite()
 
@@ -15,7 +17,13 @@ def runGraph(self, request, queryset):
         count = count + 1
     self.message_user(request, "%s graphs done." % count)
 runGraph.short_description = "Run graphing task for the selected graphs"
-    
+
+class graphForm(forms.ModelForm):
+    class Media:
+        js = ('js/dataDefAutoLimit.js',)
+    class Meta:
+        model = graph
+        
 class nodeInline(admin.TabularInline):
     model = node
 class serviceInline(admin.TabularInline):
@@ -71,6 +79,7 @@ class graphAdmin(admin.ModelAdmin):
             'fields':  ('codename','path','lastCommandLine')
         }))
     inlines = (dataDefinitionInline,)
+    form = graphForm
 class rrdDataSourceAdmin(admin.ModelAdmin):
     list_display = ('name','rrdFile')
     list_filter = ('rrdFile',)

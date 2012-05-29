@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from colors import fields
 
-
 # Create your models here.
 class entity(models.Model):
     name = models.CharField(max_length=64,blank=True)
