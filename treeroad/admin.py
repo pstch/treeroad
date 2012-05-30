@@ -21,13 +21,23 @@ runGraph.short_description = "Run graphing task for the selected graphs"
 class serviceSelectWidget(Select):
     def render(self, *args, **kwargs):
         orig = super(serviceSelectWidget, self).render(*args, **kwargs)
-        script = "<script>alert('test')</script>"
+        script = """<script>
+        django.jQuery('#id_service').change(function(){
+            for (opt in django.jQuery('td.data select option'))
+            {
+                obj = django.jQuery('#td.data select option[value='+opt+']')
+                if (obj.html().indexOf(django.jQuery('#id_service option:selected').html()) != -1) 
+                {
+                    opt.remove()
+                }
+            }
+        });
+        </script>"""
         return mark_safe(orig + script)
 class graphForm(forms.ModelForm):
     service = forms.ModelChoiceField(widget=serviceSelectWidget,queryset=service.objects.all())
     class Meta:
         model = graph
-        
 class nodeInline(admin.TabularInline):
     model = node
 class serviceInline(admin.TabularInline):
