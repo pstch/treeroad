@@ -6,6 +6,8 @@ from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph
 
 import tasks
 from django import forms
+from django.utils.safestring import mark_safe
+from django.forms.widgets import Select
 
 admin.site = TreeroadAdminSite()
 
@@ -16,8 +18,13 @@ def runGraph(self, request, queryset):
         count = count + 1
     self.message_user(request, "%s graphs done." % count)
 runGraph.short_description = "Run graphing task for the selected graphs"
-
+class serviceSelectWidget(Select):
+    def render(self, *args, **kwargs):
+        orig = super(serviceSelectWidget, self).render(*args, **kwargs)
+        script = "<script>alert('test')</script>"
+        return mark_safe(orig + script)
 class graphForm(forms.ModelForm):
+    service = forms.ModelChoiceField(widget=serviceSelectWidget,queryset=service.objects.all())
     class Meta:
         model = graph
         
