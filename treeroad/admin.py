@@ -20,7 +20,7 @@ runGraph.short_description = "Run graphing task for the selected graphs"
 
 class graphForm(forms.ModelForm):
     class Media:
-        js = ('js/dataDefAutoLimit.js') #TODO: Make this file
+        js = ('js/dataDefAutoLimit.js',) #TODO: Make this file
     class Meta:
         model = graph
         
