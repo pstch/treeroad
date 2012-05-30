@@ -6,7 +6,6 @@ from treeroad.models import domain, node, service, rrdFile, rrdDataSource, graph
 
 import tasks
 from django import forms
-from django.forms.widgets import Select
 
 admin.site = TreeroadAdminSite()
 
@@ -19,8 +18,6 @@ def runGraph(self, request, queryset):
 runGraph.short_description = "Run graphing task for the selected graphs"
 
 class graphForm(forms.ModelForm):
-    class Media:
-        js = ('js/dataDefAutoLimit.js',) #TODO: Make this file
     class Meta:
         model = graph
         
