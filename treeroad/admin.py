@@ -9,8 +9,6 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.forms.widgets import Select
 
-admin.site = TreeroadAdminSite()
-
 def runGraph(self, request, queryset):
     count = 0
     for item in queryset:
