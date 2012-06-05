@@ -23,13 +23,20 @@ class serviceSelectWidget(Select):
         django.jQuery('#id_service').change(function(){
             for (opt in django.jQuery('td.data select option'))
             {
-                obj = django.jQuery('#td.data select option[value='+opt+']')
-                if (obj.html().indexOf(django.jQuery('#id_service option:selected').html()) != -1) 
+                obj = django.jQuery('td.data select option[value=' + opt + ']')
+                obj_label = String(obj.html())
+                selected_label = django.jQuery('#id_service option:selected').html()
+                if (obj_label.indexOf(selected_label) == -1) 
                 {
-                    opt.remove()
+                    django.jQuery('td.data select option[value=' + opt + ']').attr("disabled","disabled");
+                }
+                else
+                {
+                    django.jQuery('td.data select option[value=' + opt + ']').attr("enabled","enabled");
                 }
             }
         });
+        django.jQuery('tbody tr.dynamic-defs td.cf').ready(django.jQuery('#id_service').change())
         </script>"""
         return mark_safe(orig + script)
 class graphForm(forms.ModelForm):
