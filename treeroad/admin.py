@@ -8,6 +8,7 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.forms.widgets import Select
 
+
 def runGraph(self, request, queryset):
     count = 0
     for item in queryset:
@@ -114,6 +115,6 @@ admin.site.register(rrdDataSource,rrdDataSourceAdmin)
 admin.site.register(lineDefinition,lineDefinitionAdmin)
 admin.site.register(dataDefinition,dataDefinitionAdmin)
 
-admin.site.register_view('graph', graphTaskView, 'Run graphing task') #@UndefinedVariable
-admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database') #@UndefinedVariable
-admin.site.register_view('parse', parseTree, 'Lookup data sources') #@UndefinedVariable
+admin.site.register_view('graph', graphTaskView, 'Run graphing task', label='Use this to run graphing task for all of the active graphs. This may take some time. You can also run graph tasks individually as actions in the graph list.') 
+admin.site.register_view('sync', syncTree, 'Lookup data sources and sync them with the database')
+admin.site.register_view('parse', parseTree, 'Lookup data sources')
