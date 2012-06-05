@@ -9,8 +9,6 @@ from os import listdir
 from treeroad.models import domain, node, service, rrdFile, graph
 from treeroad.rrdfuncs import readRrdInfo
 
-## TODO: NEED TO ADD BREADCRUMBS
-
 def servInfo(request):
     return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv (192.168.2.233:8000)', 
                                                           'date' : datetime.datetime.now(),
@@ -145,10 +143,16 @@ def overView(request):
     nodeCount = node.objects.count()
     host = request.META['HTTP_HOST']
     date = datetime.datetime.isoformat(datetime.datetime.now())
+    notableNodes = node.objects.filter(showInOverView=True)
+    notableServices = service.objects.filter(showInOverView=True)
+    notableGraphs = graph.objects.filter(showInOverView=True)
     # more
     return render_to_response("treeroad/overView.html", { 'graphCount' : graphCount,
                                                           'rrdFileCount' : rrdFileCount,
                                                           'serviceCount' : serviceCount,
                                                           'nodeCount' : nodeCount,
                                                           'host' : host,
-                                                          'date' : date})
+                                                          'date' : date,
+                                                          'notableNodes' : notableNodes,
+                                                          'notableServices' : notableServices,
+                                                          'notableGraphs' : notableGraphs})
