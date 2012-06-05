@@ -8,10 +8,10 @@
     <table style="width: 100%">
       <caption>TreeRoad Tasks</caption>
       <tbody>
-        {% for path, name in custom_list %}
+        {% for path, name, label in custom_list %}
           <tr><td>
           	<b><a href="{{ path }}">{{ name }}</a></b>
-          	<p>{{ label }}</p>
+          	{% if label %}<p style="white-space: normal">{{ label }}</p>{% endif %}
           </td></tr>
         {% endfor %}
       </tbody>
