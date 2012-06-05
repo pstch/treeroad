@@ -25,14 +25,12 @@ class domain(entity):
 class node(entity,pathLevel):
     domain = models.ForeignKey(domain, blank=True, null=True)
     showInOverView = models.BooleanField(default=False)
-    ## TODO: Add showInOverView
     def get_absolute_url(self):
         return reverse('nodeDetail', args = [self.id])
 class service(entity,pathLevel):
     node = models.ForeignKey(node,related_name="services")
     showInOverView = models.BooleanField(default=False)
     showInNode = models.BooleanField(default=False)
-    ## TODO: Add showInNode, showInOverView
     def get_absolute_url(self):
         return reverse('serviceDetail', args = [self.id])
 class rrdFile(pathLevel):
@@ -60,7 +58,6 @@ class graph(entity):
     showInOverView = models.BooleanField(default=False)
     showInNode = models.BooleanField(default=False)
     showInService = models.BooleanField(default=False)
-    ## TODO: Add showInService, showInNode, showInOverView
     def get_absolute_url(self):
         return reverse('graphDetail', args = [self.id])
     def save(self, *args, **kwargs):
