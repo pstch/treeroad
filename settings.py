@@ -119,7 +119,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'area13.treeroad',
     'django_extensions',
-    'colors',
 )
 
 # A sample logging configuration. The only tangible logging
