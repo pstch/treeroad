@@ -7,4 +7,64 @@
 <h2>Summary</h2>
 <p>This is the TreeRoad instance at <b>{{ host }}</b>. I have {{ graphCount }} graph tasks, taking data from {{ rrdFileCount }} .rrd files, {{ serviceCount }} services, {{ nodeCount}} nodes.
 </div>
+
+{% if notableNodes %}
+<div class="block">
+<h2>Notable nodes</h2>
+{% for node in notableNodes %}
+<a href="/treeroad/node/{{ node.id }}" class="objectblock">
+<h3><b>{{ node.name }}</b>{{ node.services.count }} service{{ node.services.count|pluralize }} 
+{% if node.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>{{ node.description }}
+<br/><i>(path part: <b>{{ node.pathPart }})</b></i></p>
+</a>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+{% if notableServices %}
+<div class="block">
+<h2>Notable services</h2>
+{% for service in notableServices %}
+<a href="/treeroad/service/{{ service.id }}" class="objectblock">
+<h3><b>{{ service.name }}</b>{{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
+{% if service.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>{{ service.description }}
+<br/><i>(path part: <b>{{ service.pathPart }})</b></i></p>
+</a>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if notableGraphs %}
+<div class="block">
+<h2>Notable graphs</h2>
+{% for graph in notableGraphs %}
+<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+{% if graph.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>
+<b>Start:</b> {{ graph.start }} &nbsp;
+<b>End:</b> {{ graph.end }} &nbsp;
+<b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
+{{ graph.description }}<br/>
+{% if graph.drawThumbnail %}
+<img src="/media/graphs/{{ graph.thumbPath }}" />
+{% endif %}
+</p>
+</a>
+{% endfor %}
+</div>
+{% endif %}
+
 {% endblock %}

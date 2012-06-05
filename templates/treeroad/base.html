@@ -8,27 +8,22 @@
 </head>
 
 <body>
-	<div id="blackBar"></div>
-	<div id="header">
-		<div id="blackBar"></div>
-		<h1>TreeRoad</h1>
-    	<div id="nav">
-        	{% block sidebar %}
-        	<ul>
-            	<li><a href="/treeroad/">Overview</a></li>
-            	<li><a href="/treeroad/nodes">Nodes</a></li>
-            	<li><a href="/treeroad/services">Services</a></li>
-            	<li><a href="/treeroad/graphs">Graphs</a></li>
-            	<li><a href="/treeroad/servInfo">Server info</a></li>
-            	<li><a href="/admin/">Admin</a></li>
-        	</ul>
-        	{% endblock %}
-        </div>
-        <div id="infos">{{ date }}</div>
-    </div>
+<div id="header">
+<h1>TreeRoad</h1>
+{% block sidebar %}
+<ul id="nav">
+<li><a href="/treeroad/">Overview</a></li>
+<li><a href="/treeroad/nodes">Nodes</a></li>
+<li><a href="/treeroad/services">Services</a></li>
+<li><a href="/treeroad/graphs">Graphs</a></li>
+<li><a href="/treeroad/servInfo">Server info</a></li>
+<li><a href="/admin/">Admin</a></li>
+</ul>
+{% endblock %}
+</div>
 
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
+<div id="content">
+{% block content %}{% endblock %}
+</div>
 </body>
 </html>
