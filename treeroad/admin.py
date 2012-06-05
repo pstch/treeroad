@@ -84,18 +84,18 @@ class graphAdmin(admin.ModelAdmin):
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
     actions = [runGraph]
-    readonly_fields = ('path','lastCommandLine')
+    readonly_fields = ('path','thumbPath','lastCommandLine')
     fieldsets = (
         (None , {
             'fields': ('name', 'service', 'description', 'highlight')
         }),
         ('Base graph settings', {
             'classes': ('collapse',),
-            'fields':  ('width','height','start','end')
+            'fields':  ('width','height','start','end','showInOverView','showInNode','showInService','drawThumbnail')
         }),
         ('Computed paths/slugs/cmdlines', {
             'classes': ('collapse',),
-            'fields':  ('codename','path','lastCommandLine')
+            'fields':  ('codename','path','thumbPath','lastCommandLine')
         }))
     inlines = (dataDefinitionInline,)
     form = graphForm
