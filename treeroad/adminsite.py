@@ -40,9 +40,6 @@ class AdminSitePlus(AdminSite):
         """Make sure our list of custom views is on the index page."""
         if not extra_context:
             extra_context = {}
-        custom_list = [(path, name if name else
-                        capfirst(view.__name__), label) for path, view, name, label in
-                        self.custom_views]
         custom_list = []
         for path, view, name, label in self.custom_views:
             if not name:
