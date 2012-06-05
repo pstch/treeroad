@@ -3,12 +3,17 @@
 from django.contrib.admin.sites import AdminSite
 from django.utils.text import capfirst
 
-class TreeroadAdminSite(AdminSite):
+
+VERSION = (0, 1, 5)
+__version__ = '.'.join([str(x) for x in VERSION])
+
+
+class AdminSitePlus(AdminSite):
     """Extend AdminSite to allow registering custom admin views."""
-    index_template = 'treeroad/admin/index.html'  # That was easy.
+    index_template = 'admin/index.html'  # That was easy.
     custom_views = []
 
-    def register_view(self, path, view, name=None):
+    def register_view(self, path, view, name=None, label=None):
         """Add a custom admin view.
 
         * `path` is the path in the admin where the view will live, e.g.
@@ -17,13 +22,13 @@ class TreeroadAdminSite(AdminSite):
         * `name` is an optional pretty name for the list of custom views. If
             empty, we'll guess based on view.__name__.
         """
-        self.custom_views.append((path, view, name))
+        self.custom_views.append((path, view, name, label))
 
     def get_urls(self):
         """Add our custom views to the admin urlconf."""
-        urls = super(TreeroadAdminSite, self).get_urls()
+        urls = super(AdminSitePlus, self).get_urls()
         from django.conf.urls.defaults import patterns, url
-        for path, view, name in self.custom_views:
+        for path, view, name, label in self.custom_views:
             urls += patterns('',
                 url(r'^%s$' % path, self.admin_view(view)),
             )
@@ -34,11 +39,11 @@ class TreeroadAdminSite(AdminSite):
         if not extra_context:
             extra_context = {}
         custom_list = [(path, name if name else
-                        capfirst(view.__name__)) for path, view, name in
+                        capfirst(view.__name__), label) for path, view, name, label in
                         self.custom_views]
         # Sort views alphabetically.
         custom_list.sort(key=lambda x: x[1])
         extra_context.update({
             'custom_list': custom_list
         })
-        return super(TreeroadAdminSite, self).index(request, extra_context)
+        return super(AdminSitePlus, self).index(request, extra_context)
