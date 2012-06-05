@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
-from colors import fields
 
 # Create your models here.
 class entity(models.Model):
@@ -16,7 +15,7 @@ class entity(models.Model):
 class pathLevel(models.Model):
     # Because the .rrd path is calculated based on model data, the .png file path will be consistent and coherent, at least as much as the .rrd files.
     # It should be expected that most of the path will be the same, expect of course for the filename extension
-    pathPart = models.CharField(max_length=64)
+    pathPart = models.CharField(max_length=64,blank=True)
     class Meta:
         abstract = True
 class domain(entity):
@@ -58,6 +57,8 @@ class graph(entity):
     showInOverView = models.BooleanField(default=False)
     showInNode = models.BooleanField(default=False)
     showInService = models.BooleanField(default=False)
+    drawThumbnail = models.BooleanField(default=True)
+    thumbPath = models.CharField(max_length=64, blank=True, null=True)
     def get_absolute_url(self):
         return reverse('graphDetail', args = [self.id])
     def save(self, *args, **kwargs):
@@ -66,6 +67,7 @@ class graph(entity):
             self.name = str(self.service.name).capitalize()
             self.codename = slugify(self.name)
         self.path = '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '.png'
+        self.thumbPath = '/' + self.service.pathPart + '/' + str(self.codename) + '-' + str(self.id) +  '-thumb.png'
         super(graph, self).save(*args,**kwargs)
 class dataDefinition(models.Model):
     graph = models.ForeignKey(graph, related_name="defs")
@@ -94,10 +96,10 @@ class lineDefinition(models.Model):
     name = models.CharField(max_length=64)
     width = models.DecimalField(default=1, max_digits=2, decimal_places=1)
     data = models.ForeignKey(dataDefinition, related_name="defs") # Restricted only to related objects (datasource.rrdFile = graph.rrdFile)
-    color = fields.ColorField(blank=True)
+    color = models.CharField(blank=True,max_length=7)
     lastInstruction = models.CharField(max_length=128,blank=True)
     def defInstruction(self):
-        return 'LINE' + str(self.width) + ':' + self.data.vname() + self.color + ':"' + self.name + '"'
+        return 'LINE' + str(self.width) + ':' + self.data.vname() + str(self.color) + ':"' + self.name + '"'
     def save(self, *args, **kwargs):
         super(lineDefinition, self).save(*args, **kwargs) # Call the "real" save() method. FIXME: This is the wrong way
         self.lastInstruction = self.defInstruction()
