@@ -9,7 +9,10 @@
       <caption>TreeRoad Tasks</caption>
       <tbody>
         {% for path, name in custom_list %}
-          <tr><td><b><a href="{{ path }}">{{ name }}</a></b></td></tr>
+          <tr><td>
+          	<b><a href="{{ path }}">{{ name }}</a></b>
+          	<p>{{ label }}</p>
+          </td></tr>
         {% endfor %}
       </tbody>
     </table>
