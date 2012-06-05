@@ -24,7 +24,6 @@ class AdminSitePlus(AdminSite):
             empty, we'll guess based on view.__name__.
         """
         self.custom_views.append((path, view, name, label))
-        print 'HAHAHA: ' + str(label)
 
     def get_urls(self):
         """Add our custom views to the admin urlconf."""
