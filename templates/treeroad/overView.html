@@ -9,8 +9,8 @@
 </div>
 
 {% if notableNodes %}
-<div class="block">
-<h2>Notable nodes</h2>
+<div class="block" id="notableNodes">
+<h2>Notable nodes<span class="toggle">+</span></h2>
 {% for node in notableNodes %}
 <a href="/treeroad/node/{{ node.id }}" class="objectblock">
 <h3><b>{{ node.name }}</b>{{ node.services.count }} service{{ node.services.count|pluralize }} 
@@ -24,11 +24,16 @@
 {% endfor %}
 </ul>
 </div>
+<script>
+$("div#notableNodes.block > h2 > span.toggle").click(function() {
+  $("div#notableNodes.block > a").slideToggle()
+});
+</script>
 {% endif %}
 
 {% if notableServices %}
-<div class="block">
-<h2>Notable services</h2>
+<div class="block" id="notableServices">
+<h2>Notable services<span class="toggle">+</span></h2>
 {% for service in notableServices %}
 <a href="/treeroad/service/{{ service.id }}" class="objectblock">
 <h3><b>{{ service.name }}</b>{{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
@@ -41,11 +46,16 @@
 </a>
 {% endfor %}
 </div>
+<script>
+$("div#notableServices.block > h2 > span.toggle").click(function() {
+  $("div#notableServices.block > a").slideToggle()
+});
+</script>
 {% endif %}
 
 {% if notableGraphs %}
-<div class="block">
-<h2>Notable graphs</h2>
+<div class="block" id="notableGraphs">
+<h2>Notable graphs<span class="toggle">+</span></h2>
 {% for graph in notableGraphs %}
 <a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
 <h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
@@ -65,6 +75,11 @@
 </a>
 {% endfor %}
 </div>
+<script>
+$("div#notableGraphs.block > h2 > span.toggle").click(function() {
+  $("div#notableGraphs.block > a").slideToggle()
+});
+</script>
 {% endif %}
 
 {% endblock %}

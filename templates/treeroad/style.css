@@ -97,3 +97,15 @@ body {
 	margin: 0px;
 	font-size: 80%;
 }
+.block .toggle {
+	color: #999;
+	float: right;
+	cursor: pointer;
+}
+.block .toggle:hover {
+	color: #000;
+}
+.block .toggle:hover:before {
+	content: "toggle slide>";
+	font-size: 50%;
+}

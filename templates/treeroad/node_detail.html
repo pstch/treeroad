@@ -4,28 +4,66 @@
 
 {% block content %}
 <div class="block">
-<h1>{{ node.name }} detail</h1>
+<h2>{{ node.name }} detail</h2>
+<b>Domain:</b> {{ node.domain }} &nbsp;
+<b>Services :</b> {{ node.services.count }} &nbsp;
+<b>Highlighted :</b> {{ node.highlight }} &nbsp;
+<b>Visible in overview:</b> {{ node.showInOverView }} &nbsp;
 <p>
 {{ node.description }}
 </p>
 </div>
-<div class="whiteblock">
-<h2>Service list</h2>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>.rrd files</th>
-    <th>graphs</th>
-  </tr>
-  {% for service in node.services.all %}
-  <tr>
-    <td><a href="/treeroad/service/{{ service.id }}">{{ service.name }}</a></td>
-    <td>{{ service.description }}</td>
-    <td>{{ service.rrdfiles.all|length }}</td>
-    <td>{% ifnotequal service.graphs.all|length 0 %}<font color="green"><b>{{ service.graphs.all|length }}</b></font>{% else %}{{ service.graphs.all|length }}{% endifnotequal %}</td>
-  </tr>
-  {% endfor %}
-</table>
+
+
+
+{% if node.notable_services %}
+<div class="block" id="notableServices">
+<h2>Notable services<span class="toggle">+</span></h2>
+{% for service in node.notable_services %}
+<a href="/treeroad/service/{{ service.id }}" class="objectblock">
+<h3><b>{{ service.name }}</b>{{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
+{% if service.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>{{ service.description }}
+<br/><i>(path part: <b>{{ service.pathPart }})</b></i></p>
+</a>
+{% endfor %}
 </div>
+<script>
+$("div#notableServices.block > h2 > span.toggle").click(function() {
+  $("div#notableServices.block > a").slideToggle()
+});
+</script>
+{% endif %}
+
+{% if node.notable_graphs %}
+<div class="block" id="notableGraphs">
+<h2>Notable graphs<span class="toggle">+</span></h2>
+{% for graph in node.notable_graphs %}
+<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+{% if graph.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>
+<b>Start:</b> {{ graph.start }} &nbsp;
+<b>End:</b> {{ graph.end }} &nbsp;
+<b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
+{{ graph.description }}<br/>
+{% if graph.drawThumbnail %}
+<img src="/media/graphs/{{ graph.thumbPath }}" />
+{% endif %}
+</p>
+</a>
+{% endfor %}
+</div>
+{% endif %}
+<script>
+$("div#notableGraphs.block > h2 > span.toggle").click(function() {
+  $("div#notableGraphs.block > a").slideToggle()
+});
+</script>
 {% endblock %}
