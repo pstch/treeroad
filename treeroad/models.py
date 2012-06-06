@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
 # Create your models here.
+
 class entity(models.Model):
     name = models.CharField(max_length=64,blank=True)
     description = models.TextField(blank=True, null=True)
@@ -24,6 +25,18 @@ class domain(entity):
 class node(entity,pathLevel):
     domain = models.ForeignKey(domain, blank=True, null=True)
     showInOverView = models.BooleanField(default=False)
+    @property
+    def notable_services(self):
+        return self.services.filter(showInNode=True)
+    @property
+    def notable_graphs(self):
+        _notable_graphs = []
+        for _service in self.services.all():
+            _graphs = _service.graphs.filter(showInNode=True)
+            if _graphs:
+                for _graph in _graphs:
+                    _notable_graphs.append(_graph)
+        return _notable_graphs
     def get_absolute_url(self):
         return reverse('nodeDetail', args = [self.id])
 class service(entity,pathLevel):
@@ -53,7 +66,7 @@ class graph(entity):
     height = models.PositiveSmallIntegerField(default=250)
     path = models.CharField(max_length=64, blank=True, null=False)
     active = models.BooleanField(default=True)
-    lastCommandLine = models.CharField(max_length=64, blank=True, null=False)
+    lastCommandLine = models.CharField(max_length=2048, blank=True, null=False)
     showInOverView = models.BooleanField(default=False)
     showInNode = models.BooleanField(default=False)
     showInService = models.BooleanField(default=False)
