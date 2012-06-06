@@ -37,7 +37,7 @@ class serviceSelectWidget(Select):
             }
         });
         django.jQuery('tbody tr.dynamic-defs td.cf').ready(django.jQuery('#id_service').change())
-        </script>"""
+        </script>""" ## FIXME: TODO: this code does'nt work at the SECOND service change
         return mark_safe(orig + script)
 class graphForm(forms.ModelForm):
     service = forms.ModelChoiceField(widget=serviceSelectWidget,queryset=service.objects.all())
