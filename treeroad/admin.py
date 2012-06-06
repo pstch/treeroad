@@ -67,31 +67,30 @@ class domainAdmin(admin.ModelAdmin):
     list_filter = ('highlight',)
     inlines = [nodeInline,]
 class nodeAdmin(admin.ModelAdmin):
-    list_display = ('name','domain','description','highlight','pathPart')
+    list_display = ('name','domain','description','highlight','pathPart','showInOverView')
     list_filter = ('highlight','domain')
     inlines = [serviceInline,]
 class serviceAdmin(admin.ModelAdmin):
-    list_display = ('name','node','description','highlight','pathPart')
+    list_display = ('name','node','description','highlight','pathPart','showInOverView','showInNode')
     list_filter = ('highlight','node')
-    inlines = [rrdFileInline,graphInline]
 class rrdFileAdmin(admin.ModelAdmin):
     list_display = ('pathPart','service','lastUpdate')
     list_filter = ('service',)
     date_hierarchy = ('lastUpdate')
     inlines = [rrdDataSourceInline,]
 class graphAdmin(admin.ModelAdmin):
-    list_display = ('name','service','description','highlight')
+    list_display = ('name','service','description','highlight','showInOverView','showInNode','showInService')
     list_filter = ('highlight','service')
     prepopulated_fields = {"codename": ('name',)}
     actions = [runGraph]
     readonly_fields = ('path','thumbPath','lastCommandLine')
     fieldsets = (
         (None , {
-            'fields': ('name', 'service', 'description', 'highlight')
+            'fields': ('name', 'service', 'description', 'highlight','showInOverView','showInNode','showInService')
         }),
         ('Base graph settings', {
             'classes': ('collapse',),
-            'fields':  ('width','height','start','end','showInOverView','showInNode','showInService','drawThumbnail')
+            'fields':  ('width','height','start','end','drawThumbnail')
         }),
         ('Computed paths/slugs/cmdlines', {
             'classes': ('collapse',),
