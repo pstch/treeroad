@@ -38,6 +38,9 @@ class serviceSelectWidget(Select):
         });
         django.jQuery('tbody tr.dynamic-defs td.cf').ready(django.jQuery('#id_service').change())
         </script>""" ## FIXME: TODO: this code does'nt work at the SECOND service change
+        ## Tried replacing .attr("disabled","disabled") by .hide() or .show(). Works better, SECOND service change is good, but display is buggy : displays only ONE line of choices, so we always have to scroll.
+        ## FIXME: This code is sloooooooow 
+        ##
         return mark_safe(orig + script)
 class graphForm(forms.ModelForm):
     service = forms.ModelChoiceField(widget=serviceSelectWidget,queryset=service.objects.all())
