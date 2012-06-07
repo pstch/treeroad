@@ -44,15 +44,11 @@ body {
 	border: 1px solid #999;
 	padding: 10px;
 }
-}
 #content .block h1 {
 	margin: 5px;
 }
 #content h2 {
 	margin: 3px;
-}
-.block {
-	clear: both;
 }
 .block h2 {
 		clear: both;
@@ -60,7 +56,7 @@ body {
 .block {
 	padding: 5px;
 	list-style: none;
-	
+	clear: both;
 	width: auto;
 	overflow: hidden;
 }
@@ -108,4 +104,29 @@ body {
 .block .toggle:hover:before {
 	content: "toggle slide>";
 	font-size: 50%;
+}
+table { 
+	border-collapse: collapse;
+	text-align: left;
+} 
+table td, table th { 
+	padding: 2px 5px; 
+}
+table tr:first-child {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #424242), color-stop(1, #616161) );
+	background:-moz-linear-gradient( center top, #424242 5%, #616161 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#424242', endColorstr='#616161');
+	background-color:#424242; 
+	color:#FFFFFF; 
+	font-weight: bold; 
+}
+table td { 
+	color: #000000;
+	font-weight: normal;
+}
+table tr td a {
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
+}
 }

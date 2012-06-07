@@ -36,7 +36,7 @@ $("div#notableNodes.block > h2 > span.toggle").click(function() {
 <h2>Notable services<span class="toggle">+</span></h2>
 {% for service in notableServices %}
 <a href="/treeroad/service/{{ service.id }}" class="objectblock">
-<h3><b>{{ service.name }}</b>{{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
+<h3><b>{{ service.name }}</b><i>{{ service.node }}</i> {{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
 {% if service.highlight %}
 <i>HL</i>
 {% endif %}
@@ -58,7 +58,7 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 <h2>Notable graphs<span class="toggle">+</span></h2>
 {% for graph in notableGraphs %}
 <a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
-<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+<h3><b>{{ graph.name }}</b><i> {{ graph.service.node }}/{{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
 {% if graph.highlight %}
 <i>HL</i>
 {% endif %}
