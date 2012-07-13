@@ -5,10 +5,13 @@
 {% block content %}
 <div class="block">
 <h2>{{ node.name }} detail</h2>
-<b>Domain:</b> {{ node.domain }} &nbsp;
-<b>Services :</b> {{ node.services.count }} &nbsp;
-<b>Highlighted :</b> {{ node.highlight }} &nbsp;
-<b>Visible in overview:</b> {{ node.showInOverView }} &nbsp;
+<b>Domain :</b> {{ node.domain }} <br/>
+<b>Services :</b> {{ node.services.count }} <br/>
+<b>Notable services :</b> {{ node.notable_services.count }} <br/>
+<b>Graphs :</b> {{ node.graphs|length }} <br/>
+<b>Notable graphs :</b> {{ node.notable_graphs|length }} <br/>
+<b>Highlighted :</b> {{ node.highlight }} <br/>
+<b>Visible in overview :</b> {{ node.showInOverView }} <br/>
 <p>
 {{ node.description }}
 </p>
@@ -28,10 +31,26 @@
 </h3>
 <p>{{ service.description }}
 <br/><i>(path part: <b>{{ service.pathPart }})</b></i></p>
+{% if service.graphs.all|length == 0 %}
+<p>No graphs.</p>
+{% else %}
+{% if service.graphs.all|length > 1 %}
+<p>More than one graph.</p>
+{% else %}
+{% with service.graphs.all|first as first_graph %}
+{% if first_graph.drawThumbnail %}
+<img src="/media/graphs/{{ first_graph.thumbPath }}" />
+{% endif %}
+{% endwith %}
+{% endif %}
+{% endif %}
 </a>
 {% endfor %}
 </div>
 <script>
+$("body").ready(function () {
+	  $("div#notableServices.block > a").slideUp(0)
+	});
 $("div#notableServices.block > h2 > span.toggle").click(function() {
   $("div#notableServices.block > a").slideToggle()
 });
@@ -61,9 +80,78 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 {% endfor %}
 </div>
 <script>
+$("body").ready(function () {
+	  $("div#notableGraphs.block > a").slideUp(0)
+	});
 $("div#notableGraphs.block > h2 > span.toggle").click(function() {
   $("div#notableGraphs.block > a").slideToggle()
 });
 </script>
 {% endif %}
+
+<div class="block" id="allServices">
+<h2>All services<span class="toggle">+</span></h2>
+{% for service in node.services.all %}
+<a href="/treeroad/service/{{ service.id }}" class="objectblock">
+<h3><b>{{ service.name }}</b>{{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
+{% if service.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>{{ service.description }}
+<br/><i>(path part: <b>{{ service.pathPart }})</b></i></p>
+{% if service.graphs.all|length == 0 %}
+<p>No graphs.</p>
+{% else %}
+{% if service.graphs.all|length > 1 %}
+<p>More than one graph.</p>
+{% else %}
+{% with service.graphs.all|first as first_graph %}
+{% if first_graph.drawThumbnail %}
+<img src="/media/graphs/{{ first_graph.thumbPath }}" />
+{% endif %}
+{% endwith %}
+{% endif %}
+{% endif %}
+</a>
+{% endfor %}
+</div>
+<script>
+$("body").ready(function () {
+	  $("div#allServices.block > a").slideUp(0)
+	});
+$("div#allServices.block > h2 > span.toggle").click(function() {
+  $("div#allServices.block > a").slideToggle()
+});
+</script>
+
+<div class="block" id="allGraphs">
+<h2>All graphs<span class="toggle">+</span></h2>
+{% for graph in node.graphs %}
+<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+{% if graph.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>
+<b>Start:</b> {{ graph.start }} &nbsp;
+<b>End:</b> {{ graph.end }} &nbsp;
+<b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
+{{ graph.description }}<br/>
+{% if graph.drawThumbnail %}
+<img src="/media/graphs/{{ graph.thumbPath }}" />
+{% endif %}
+</p>
+</a>
+{% endfor %}
+</div>
+<script>
+$("body").ready(function () {
+	  $("div#allGraphs.block > a").slideUp(0)
+	});
+$("div#allGraphs.block > h2 > span.toggle").click(function() {
+  $("div#allGraphs.block > a").slideToggle()
+});
+</script>
 {% endblock %}

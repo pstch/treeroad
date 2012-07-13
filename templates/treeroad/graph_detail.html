@@ -3,8 +3,19 @@
 {% block title %}TreeRoad - {{ object.name }}{% endblock %}
 
 {% block content %}
-{{ object }}
+<div class="block">
+<h2>{{ graph.name }} detail</h2>
+<b>Service:</b> {{ graph.service }} <br/>
+<b>Node:</b> {{ graph.service.node }} <br/>
+<b>Start > End :</b> {{ graph.start }} > {{ graph.end }} <br/>
+<b>Width x Height :</b> {{ graph.width }}x{{ graph.height }} <br/> <br/>
+<b>Number of data definitions :</b> {{ graph.defs.all|length }} <br/>
+<b>Rendering path :</b> {{ graph.path }} <br/>
+<b>Active :</b> {{ graph.active }} <br/> <br/>
+<b>Draw thumbnail :</b> {{ graph.drawThumbnail }} <br/>
+<b>Thumbnail path :</b> {{ graph.thumbPath }} <br/>
 <p>
 <img src="/media/graphs/{{ object.path }}"
 </p>
+</div>
 {% endblock %}

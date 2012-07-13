@@ -12,13 +12,15 @@
     <th>Domain</th>
     <th>Description</th>
     <th>Services</th>
+    <th>Graphs</th>
   </tr>
   {% for node in object_list %}
   <tr>
     <td><a href="/treeroad/node/{{ node.id }}">{{ node.name }}</a></td>
     <td>{{ node.domain.name }}</td>
     <td>{{ node.description }}</td>
-    <td>{{ node.services.all|length }}</td>
+    <td>{{ node.services.all|length }} (N:{{ node.notable_services|length }})</td>
+    <td>{{ node.graphs|length }} (N:{{ node.notable_graphs|length }})</td>
   </tr>
   {% endfor %}
 </table>

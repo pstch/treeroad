@@ -10,7 +10,7 @@
 
 {% if notableNodes %}
 <div class="block" id="notableNodes">
-<h2>Notable nodes<span class="toggle">+</span></h2>
+<h2>Notable nodes<span class="toggle">+</span><a href="/treeroad/nodes" class="headlink">View all nodes</a></h2>
 {% for node in notableNodes %}
 <a href="/treeroad/node/{{ node.id }}" class="objectblock">
 <h3><b>{{ node.name }}</b>{{ node.services.count }} service{{ node.services.count|pluralize }} 
@@ -25,6 +25,9 @@
 </ul>
 </div>
 <script>
+$("body").ready(function () {
+  $("div#notableNodes.block > a").slideUp(0)
+});
 $("div#notableNodes.block > h2 > span.toggle").click(function() {
   $("div#notableNodes.block > a").slideToggle()
 });
@@ -33,7 +36,7 @@ $("div#notableNodes.block > h2 > span.toggle").click(function() {
 
 {% if notableServices %}
 <div class="block" id="notableServices">
-<h2>Notable services<span class="toggle">+</span></h2>
+<h2>Notable services<span class="toggle">+</span><a href="/treeroad/services" class="headlink">View all services</a></h2>
 {% for service in notableServices %}
 <a href="/treeroad/service/{{ service.id }}" class="objectblock">
 <h3><b>{{ service.name }}</b><i>{{ service.node }}</i> {{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
@@ -43,10 +46,26 @@ $("div#notableNodes.block > h2 > span.toggle").click(function() {
 </h3>
 <p>{{ service.description }}
 <br/><i>(path part: <b>{{ service.pathPart }})</b></i></p>
+{% if service.graphs.all|length == 0 %}
+<p>No graphs.</p>
+{% else %}
+{% if service.graphs.all|length > 1 %}
+<p>More than one graph.</p>
+{% else %}
+{% with service.graphs.all|first as first_graph %}
+{% if first_graph.drawThumbnail %}
+<img src="/media/graphs/{{ first_graph.thumbPath }}" />
+{% endif %}
+{% endwith %}
+{% endif %}
+{% endif %}
 </a>
 {% endfor %}
 </div>
 <script>
+$("body").ready(function () {
+	  $("div#notableServices.block > a").slideUp(0)
+	});
 $("div#notableServices.block > h2 > span.toggle").click(function() {
   $("div#notableServices.block > a").slideToggle()
 });
@@ -55,7 +74,7 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 
 {% if notableGraphs %}
 <div class="block" id="notableGraphs">
-<h2>Notable graphs<span class="toggle">+</span></h2>
+<h2>Notable graphs<span class="toggle">+</span><a href="/treeroad/graphs" class="headlink">View all graphs</a></h2>
 {% for graph in notableGraphs %}
 <a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
 <h3><b>{{ graph.name }}</b><i> {{ graph.service.node }}/{{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
@@ -76,6 +95,9 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 {% endfor %}
 </div>
 <script>
+$("body").ready(function () {
+	  $("div#notableGraphs.block > a").slideUp(0)
+	});
 $("div#notableGraphs.block > h2 > span.toggle").click(function() {
   $("div#notableGraphs.block > a").slideToggle()
 });

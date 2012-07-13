@@ -1,33 +1,79 @@
 {% extends "treeroad/base.html" %}
 
-{% block title %}TreeRoad - {{ object.name }}{% endblock %}
+{% block title %}TreeRoad - {{ service.name }}{% endblock %}
 
 {% block content %}
 <div class="block">
-<h1>{{ service.name }} detail</h1>
+<h2>{{ service.name }} detail</h2>
+<b>Node :</b> {{ service.node }} <br/>
+<b>Domain :</b> {{ service.node.domain }} <br/>
+<b>Graphs :</b> {{ service.graphs.count }} <br/>
+<b>Notable graphs :</b> {{ service.notable_graphs|length }} <br/>
+<b>Highlighted :</b> {{ service.highlight }} <br/>
+<b>Visible in overview :</b> {{ service.showInOverView }} <br/>
 <p>
 {{ service.description }}
 </p>
 </div>
-<div class="whiteblock">
-<h2>Graph list</h2>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Start > End</th>
-    <th>Width x Height</th>
-    <th>Data definitions</th>
-  </tr>
-  {% for graph in service.graphs.all %}
-  <tr>
-    <td><a href="/treeroad/graph/{{ graph.id }}">{{ graph.name }}</a></td>
-    <td>{{ graph.description }}</td>
-    <td>{{ graph.start }} > {{ graph.end }}</td>
-    <td>{{ graph.width }}x{{ graph.height }}</td>
-    <td>{{ graph.defs.all|length }}</td>
-  </tr>
-  {% endfor %}
-</table>
+{% if service.notable_graphs %}
+<div class="block" id="notableGraphs">
+<h2>Notable graphs<span class="toggle">+</span></h2>
+{% for graph in service.notable_graphs %}
+<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+{% if graph.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>
+<b>Start:</b> {{ graph.start }} &nbsp;
+<b>End:</b> {{ graph.end }} &nbsp;
+<b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
+{{ graph.description }}<br/>
+{% if graph.drawThumbnail %}
+<img src="/media/graphs/{{ graph.thumbPath }}" />
+{% endif %}
+</p>
+</a>
+{% endfor %}
 </div>
+<script>
+$("body").ready(function () {
+	  $("div#notableGraphs.block > a").slideUp(0)
+	});
+$("div#notableGraphs.block > h2 > span.toggle").click(function() {
+  $("div#notableGraphs.block > a").slideToggle()
+});
+</script>
+{% endif %}
+
+<div class="block" id="allGraphs">
+<h2>All graphs<span class="toggle">+</span></h2>
+{% for graph in service.graphs.all %}
+<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
+{% if graph.highlight %}
+<i>HL</i>
+{% endif %}
+</h3>
+<p>
+<b>Start:</b> {{ graph.start }} &nbsp;
+<b>End:</b> {{ graph.end }} &nbsp;
+<b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
+{{ graph.description }}<br/>
+{% if graph.drawThumbnail %}
+<img src="/media/graphs/{{ graph.thumbPath }}" />
+{% endif %}
+</p>
+</a>
+{% endfor %}
+</div>
+<script>
+$("body").ready(function () {
+	  $("div#allGraphs.block > a").slideUp(0)
+	});
+$("div#allGraphs.block > h2 > span.toggle").click(function() {
+  $("div#allGraphs.block > a").slideToggle()
+});
+</script>
 {% endblock %}

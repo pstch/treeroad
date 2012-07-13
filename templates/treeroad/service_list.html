@@ -3,7 +3,8 @@
 {% block title %}TreeRoad service list{% endblock %}
 
 {% block content %}
-<h1>Service list</h1>
+<div class="block">
+<h2>Service list</h2>
 <p>{{ object_list|length }} service{{ object_list|pluralize }}</p>
 <table>
   <tr>
@@ -19,9 +20,9 @@
     <td><a href="/treeroad/node/{{ service.node.id }}">{{ service.node }}</a></td>
     <td>{{ service.description }}</td>
     <td>{{ service.rrdfiles.all|length }}</td>
-    <td>{{ service.graphs.all|length }}</td>
+    <td>{{ service.graphs.all|length }} (N:{{ service.notable_graphs.all|length }})</td>
   </tr>
   {% endfor %}
 </table>
-
+</div>
 {% endblock %}
