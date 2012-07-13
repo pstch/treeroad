@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
@@ -25,6 +24,16 @@ class domain(entity):
 class node(entity,pathLevel):
     domain = models.ForeignKey(domain, blank=True, null=True)
     showInOverView = models.BooleanField(default=False)
+    ## TODO: add graph count
+    @property
+    def graphs(self):
+        _graphs = []
+        for _service in self.services.all():
+            __graphs = _service.graphs.all()
+            if __graphs:
+                for _graph in __graphs:
+                    _graphs.append(_graph)
+        return _graphs
     @property
     def notable_services(self):
         return self.services.filter(showInNode=True)
@@ -43,6 +52,9 @@ class service(entity,pathLevel):
     node = models.ForeignKey(node,related_name="services")
     showInOverView = models.BooleanField(default=False)
     showInNode = models.BooleanField(default=False)
+    @property
+    def notable_graphs(self):
+        return self.graphs.filter(showInService=True)
     def get_absolute_url(self):
         return reverse('serviceDetail', args = [self.id])
 class rrdFile(pathLevel):
