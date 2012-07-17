@@ -2,7 +2,7 @@ TreeRoad readme file
 --------------------
 15/07/2012
 
-Git branch: area18
+Git branch: area18 :)
 
 TreeRoad is a Django-based manager for rrdfiles. It can parse the collectd arborescence and initiate graph jobs.
 https://github.com/pstch/treeroad
