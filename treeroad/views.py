@@ -13,7 +13,7 @@ def servInfo(request):
     return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv', 
                                                           'date' : datetime.datetime.now(),
                                                       'meta' : request.META},
-                              RequestContext(request, {'current_app' : 'treeroads'}))
+                              RequestContext(request, {'current_app' : 'treeroad'}))
 def parseTree(request, test=1):
     from django.conf import settings
     
@@ -127,7 +127,7 @@ def parseTree(request, test=1):
                                                           'found_datasources' : found_datasources,
                                                           'test' : test,
                                                           'debug' : _dbg },
-                              RequestContext(request, {}))
+                                                          RequestContext(request, {}))
 def syncTree(request):
     return parseTree(request, 0)
 def graphTaskView(request):
@@ -135,7 +135,8 @@ def graphTaskView(request):
     done, fails, count = graphTask()
     return render_to_response("treeroad/graphTask.html", { 'done' : done,
                                                            'fails' : fails,
-                                                           'count' : count})
+                                                           'count' : count},
+                                                           RequestContext(request, {}))
 def overView(request):
     graphCount = graph.objects.count()
     rrdFileCount = rrdFile.objects.count()
@@ -155,4 +156,5 @@ def overView(request):
                                                           'date' : date,
                                                           'notableNodes' : notableNodes,
                                                           'notableServices' : notableServices,
-                                                          'notableGraphs' : notableGraphs})
+                                                          'notableGraphs' : notableGraphs},
+                                                          RequestContext(request, {}))
