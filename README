@@ -1,0 +1,28 @@
+TreeRoad readme file
+--------------------
+15/07/2012
+
+
+TreeRoad is a Django-based manager for rrdfiles. It can parse the collectd arborescence and initiate graph jobs.
+https://github.com/pstch/treeroad
+__        _____  ____  _  __  ___ _   _ 
+\ \      / / _ \|  _ \| |/ / |_ _| \ | |
+ \ \ /\ / / | | | |_) | ' /   | ||  \| |
+  \ V  V /| |_| |  _ <| . \   | || |\  |
+   \_/\_/  \___/|_| \_\_|\_\ |___|_| \_|
+                                        
+ ____  ____   ___   ____ ____  _____ ____ ____  
+|  _ \|  _ \ / _ \ / ___|  _ \| ____/ ___/ ___| 
+| |_) | |_) | | | | |  _| |_) |  _| \___ \___ \ 
+|  __/|  _ <| |_| | |_| |  _ <| |___ ___) |__) |
+|_|   |_| \_\\___/ \____|_| \_\_____|____/____/  (should)
+
+Dependencies :
+	- adminplus installed and in INSTALLED_APPS (settings.py)
+
+Howto use:
+	- add the treeroad/, graph/ and templates/ directories to your project root
+	- fill your settings.py according to the Dependencies section
+	- add <projectname>.treeroad to INSTALLED_APPS
+	- include treeroad in your urls.py
+	- set cron tasks running graphTask() (to be implemented)
