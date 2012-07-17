@@ -10,7 +10,7 @@ from treeroad.models import domain, node, service, rrdFile, graph
 from treeroad.rrdfuncs import readRrdInfo
 
 def servInfo(request):
-    return render_to_response("treeroad/servInfo.html", { 'host' : 'arthur  vBox serv', 
+    return render_to_response("treeroad/servInfo.html", { 'host' : request.META['HTTP_HOST'], 
                                                           'date' : datetime.datetime.now(),
                                                       'meta' : request.META},
                               RequestContext(request, {'current_app' : 'treeroad'}))
