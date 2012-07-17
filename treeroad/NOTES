@@ -1,0 +1,19 @@
+& TODO
+
+Frontend
+---
+Frontend looks quite usable, if the data structure is setup properly. All templates are done, missing parts are missing by improper conception. 
+The more I move forward on this project the more I feel the need it needs a bit of a rewrite using advanced parts of Django that I didn't want to use before because of their apparent complexity. However, I will need them because in the end things will get more simple. I'm talking of, for instance, some custom Managers, a better data structure (well maybe this one is good...), and maybe even some custom template tags.
+
+Backend
+---
+The backend works (hence... Django admin), but is not really practical, because it's too much generic. It takes  much time to get a simple thing done, because we miss some field limiters. (the fact that I need field limiters makes me think that my data structure isn't perfect... but maybe there's no better way).
+See the FIXMEs and TODOs in admin.py, around line 35/40 (at ee1d4d39ed06801c1f8c933b8134461610786a06), and the shitty javascript code around it.
+But before I go for another BIG code change, I'll have to test that bitch a bit.
+
+
+Future!
+---
+Data structure changes:
+	- Add notion of "views" (graph.views = [], view.graph = graph(),), for graphs. Views should only alter the actual graph.start and graph.end (views will be entities with .start and .end), and 4 should be created by the admin backend by default. Inlines will be great for this job (for once)
+
