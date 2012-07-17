@@ -18,13 +18,13 @@
   </tr>
   {% for graph in object_list %}
   <tr>
-    <td><a href="/treeroad/graph/{{ graph.id }}">{{ graph.name }}</a></td>
+    <td><a href="{% url graphDetail graph.id %}">{{ graph.name }}</a></td>
     <td>{{ graph.service }}</td>
     <td>{{ graph.service.node }}</td>
     <td>{{ graph.start }} > {{ graph.end }}</td>
     <td>{{ graph.width }}x{{ graph.height }}</td>
     <td>{{ graph.defs.all|length }}</td>
-    <td>{% if graph.drawThumbnail %}<img width="150" src="/media/graphs/{{ graph.thumbPath }}"/>{% endif %}</td>
+    <td>{% if graph.drawThumbnail %}<img width="150" src="{{ media_url }}graphs/{{ graph.thumbPath }}"/>{% endif %}</td>
   </tr>
   {% endfor %}
 </table>

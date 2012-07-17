@@ -10,9 +10,9 @@
 
 {% if notableNodes %}
 <div class="block" id="notableNodes">
-<h2>Notable nodes<span class="toggle">+</span><a href="/treeroad/nodes" class="headlink">View all nodes</a></h2>
+<h2>Notable nodes<span class="toggle">+</span><a href="{% url nodeList %}" class="headlink">View all nodes</a></h2>
 {% for node in notableNodes %}
-<a href="/treeroad/node/{{ node.id }}" class="objectblock">
+<a href="{% url nodeDetail node.id %}" class="objectblock">
 <h3><b>{{ node.name }}</b>{{ node.services.count }} service{{ node.services.count|pluralize }} 
 {% if node.highlight %}
 <i>HL</i>
@@ -36,9 +36,9 @@ $("div#notableNodes.block > h2 > span.toggle").click(function() {
 
 {% if notableServices %}
 <div class="block" id="notableServices">
-<h2>Notable services<span class="toggle">+</span><a href="/treeroad/services" class="headlink">View all services</a></h2>
+<h2>Notable services<span class="toggle">+</span><a href="{% url serviceList %}" class="headlink">View all services</a></h2>
 {% for service in notableServices %}
-<a href="/treeroad/service/{{ service.id }}" class="objectblock">
+<a href="{% url serviceDetail service.id %}" class="objectblock">
 <h3><b>{{ service.name }}</b><i>{{ service.node }}</i> {{ service.graphs.count }} graph{{ service.graphs.count|pluralize }} 
 {% if service.highlight %}
 <i>HL</i>
@@ -54,7 +54,7 @@ $("div#notableNodes.block > h2 > span.toggle").click(function() {
 {% else %}
 {% with service.graphs.all|first as first_graph %}
 {% if first_graph.drawThumbnail %}
-<img src="/media/graphs/{{ first_graph.thumbPath }}" />
+<img src="{{ media_url }}graphs/{{ first_graph.thumbPath }}" />
 {% endif %}
 {% endwith %}
 {% endif %}
@@ -74,9 +74,9 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 
 {% if notableGraphs %}
 <div class="block" id="notableGraphs">
-<h2>Notable graphs<span class="toggle">+</span><a href="/treeroad/graphs" class="headlink">View all graphs</a></h2>
+<h2>Notable graphs<span class="toggle">+</span><a href="{% url graphList %}" class="headlink">View all graphs</a></h2>
 {% for graph in notableGraphs %}
-<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<a href="{% url graphDetail graph.id %}" class="objectblock">
 <h3><b>{{ graph.name }}</b><i> {{ graph.service.node }}/{{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
 {% if graph.highlight %}
 <i>HL</i>
@@ -88,7 +88,7 @@ $("div#notableServices.block > h2 > span.toggle").click(function() {
 <b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
 {{ graph.description }}<br/>
 {% if graph.drawThumbnail %}
-<img src="/media/graphs/{{ graph.thumbPath }}" />
+<img src="{{ media_url }}/graphs/{{ graph.thumbPath }}" />
 {% endif %}
 </p>
 </a>

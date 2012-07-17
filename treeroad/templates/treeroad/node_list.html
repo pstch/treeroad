@@ -16,7 +16,7 @@
   </tr>
   {% for node in object_list %}
   <tr>
-    <td><a href="/treeroad/node/{{ node.id }}">{{ node.name }}</a></td>
+    <td><a href="{% url nodeDetail node.id %}">{{ node.name }}</a></td>
     <td>{{ node.domain.name }}</td>
     <td>{{ node.description }}</td>
     <td>{{ node.services.all|length }} (N:{{ node.notable_services|length }})</td>

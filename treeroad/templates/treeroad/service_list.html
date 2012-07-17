@@ -16,8 +16,8 @@
   </tr>
   {% for service in object_list %}
   <tr>
-    <td><a href="/treeroad/service/{{ service.id }}">{{ service.name }}</a></td>
-    <td><a href="/treeroad/node/{{ service.node.id }}">{{ service.node }}</a></td>
+    <td><a href="{% url serviceDetail service.id %}">{{ service.name }}</a></td>
+    <td><a href="{% url nodeDetail service.node.id %}">{{ service.node }}</a></td>
     <td>{{ service.description }}</td>
     <td>{{ service.rrdfiles.all|length }}</td>
     <td>{{ service.graphs.all|length }} (N:{{ service.notable_graphs.all|length }})</td>

@@ -19,7 +19,7 @@
 <div class="block" id="notableGraphs">
 <h2>Notable graphs<span class="toggle">+</span></h2>
 {% for graph in service.notable_graphs %}
-<a href="/treeroad/graph/{{ graph.id }}" class="objectblock">
+<a href="{% url graphDetail graph.id %}" class="objectblock">
 <h3><b>{{ graph.name }}</b><i> {{ graph.service }}</i> {{ graph.defs.count }} definition{{ graph.defs.count|pluralize }} 
 {% if graph.highlight %}
 <i>HL</i>
@@ -31,7 +31,7 @@
 <b>Size:</b> {{ graph.width }}x{{ graph.height }} <br/>
 {{ graph.description }}<br/>
 {% if graph.drawThumbnail %}
-<img src="/media/graphs/{{ graph.thumbPath }}" />
+<img src="{{ media_url }}/graphs/{{ graph.thumbPath }}" />
 {% endif %}
 </p>
 </a>
