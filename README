@@ -5,7 +5,7 @@ TreeRoad readme file
 
 15/07/2012
 ---
-THIS VERSION IS OBSOLETE. AREA13 IS DEAD, AREA18 IS THE NEW PROJECT.
+THIS VERSION IS OBSOLETE. AREA13 IS DEAD, TREEROAD IS GOING TO BE REWRITTEN USING PYLONS (MAYBE)
 TreeRoad-Area13 demo available here : http://jackfuncoco.pistaches.net/treeroad-demo/
 
 TreeRoad is a Django-based manager for rrdfiles. It can parse the collectd arborescence and initiate graph jobs.
