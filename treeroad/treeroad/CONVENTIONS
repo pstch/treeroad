@@ -1,0 +1,5 @@
+Casing convention
+---
+Objects: UpperCamelCase (CamelCase)
+Functions: LowerCamelCase (mixedCase)
+Variables: underscore_spacing (lower case)
