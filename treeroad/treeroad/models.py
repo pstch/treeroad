@@ -29,7 +29,7 @@ class UserEntity(Entity):
 class UserDescriptedEntity(UserEntity):
     description = models.TextField(blank=True,null=True) # Admin: Yes
     class Meta:
-        abtract = True
+        abstract = True
 
 ### MODELS ###
 # LEVEL 0 #
