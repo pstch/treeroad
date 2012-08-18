@@ -3,3 +3,18 @@ Casing convention
 Objects: UpperCamelCase (CamelCase)
 Functions: LowerCamelCase (mixedCase)
 Variables: underscore_spacing (lower case)
+
+models.py structure
+---
+
+First part, abstract models
+Second part, real models
+
+Each part is structured by "levels", counting from 0. Levels are ruled this way:
+	- Models in the same level can not have relations between them (ForeignKeys)
+	- Models in the a level can not have relations (ForeignKeys) to lower levels objects.
+These rules are made in order to keep a consistenty and structure in the model structure. They may change, and it will be written here with an explaination.
+
+For each model, there is a comment indicating the model requirements in admin.py.
+For each model field, there is a comment indicating the model field requirements in the model admin definition in admin.py.
+This should be pretty straightforward.
