@@ -47,22 +47,34 @@ class Service(UserDescriptedEntity,PathPart):
     generic_service = models.ForeignKey(GenericService,blank=True) # Admin: Yes (but filled automatically if empty). TODO: A text in custom widget should explain the get_or_create comportement in save().
     def save(self, *args, **kwargs):
         # This routine tries to get the object from GenericService.objects, and create one if it doesn't exist, based on self.name. This should ensure GenericService consistenty.
-        # TODO: When Service is deleted, if the parent GenericService has no momre childs, it should be deleted too.
-        if not self.generic_service: self.generic_service = GenericService.objects.get_or_create(name=self.name)
-        return self.save(*args, **kwargs) # Classic :)
+        if not self.generic_service: self.generic_services = GenericService.objects.get_or_create(name=self.name)
+        return super(Service, self).save(*args, **kwargs) # Classic :)
+    def delete(self, *args, **kwargs):
+        if not self.generic_service.service_set.exists(name!=self.name): self.generic_service.delete()
+        return super(Service, self).delete(*args, **kwargs)
+            # TODO: Needs testing
+
 
 # LEVEL 2 #
 
-class Graph(UserDescriptedEntity): # Admin: Yes
-    name = models.CharField(max_length=64,blank=True) # Admin: Yes (but filled automatically if empty, using the graph->service->node hierarchy) TODO: Fill name
+class Graph(UserDescriptedEntity,PathPart): # Admin: Yes, pathPart.path_part is RO
+    name = models.CharField(max_length=64,blank=True) # Admin: Yes (but filled automatically if empty, using the graph->service->node hierarchy)
+    slug_name = models.SlugField(max_length=64,blank=True)
+    # TODO: Set prepopoulated_fields to at least slug_name,
     width = models.PositiveSmallIntegerField(default=700) # Admin: Yes
     height = models.PositiveSmallIntegerField(default=300) # Admin: Yes
-    png_path = models.SlugField(max_length=64,blank=True) # Admin: Yes, RO (filled automatically) TODO: Computing png_path
-    # FIXME: I try to use a SlugField for png_path, THAT MAY CHANGE.
-    # TODO: If SlugField for png_path, set prepopulated_fields in admin.py
     service = models.ForeignKey(Service) # Admin: Yes TODO: (VERY LATER) Widget should be customized in order to restrict DataSource choices in the DataDef inline, using some jQuery code.
     # TODO: Lots of graph parameters
     # TODO: Auto views
+    def save(self):
+        super(Graph, self).save(*args, **kwargs)
+        if not self.name:
+            self.name = str(self.service.name) + ' graph'
+            self.slug_name = str(self.service.name) # FIXME: Maybe slugify ?
+        self.path_part = str(self.id) + '-' + self.slug_name
+        super(Graph, self).save(*args, **kwargs)
+
+
 # LEVEL 2.1 #
 
 class RRDFile(PathPart): # Admin: Yes
@@ -77,21 +89,54 @@ class DataSource(models.Model): # Admin: Yes
 
 # LEVEL 3 #
 
-# TODO: Try to imagine a template system for the views, better than the DEFAULT_VIEWS approach
-class View(UserDescriptedEntity): # Admin: Yes
-    name = models.CharField(max_length=64, blank=True) # Admin: Yes (but filled automaticcally according to start and end) TODO: Compute name
+class View(UserDescriptedEntity, PathPart): # Admin: Yes, pathPart.path_part is ROaph
+    name = models.CharField(max_length=64, blank=True) # Admin: Yes (but filled automaticcally according to start and end)
+    slug_name = models.SlugField(max_length=64, blank=True)
+    graph = models.ForeignKey(Graph)
+    # Set prepopulated_fields to at least slug_name
     start = models.CharField(max_length=64,default="now-1h") # Admin: Yes
     end = models.CharField(max_length=64,default="now") # Admin: Yes
+    def save(self, *args, **kwargs):
+        super(View, self).save(*args, **kwargs)
+        if not self.name:
+            self.name = str(self.start) + ' to ' + str(self.end)
+            self.slug_name = str(self.start) + '_to_' + str(self.end)
+        self.path_part = str(self.id) + '-' + str(self.slug_name)
+        super(View, self).save(*args, **kwargs)
+class ViewTemplate(UserDescriptedEntity): # Admin: Yes, pathPart.path_part is ROaph
+    name = models.CharField(max_length=64, blank=True) # Admin: Yes (but filled automaticcally according to start and end)
+    slug_name = models.SlugField(max_length=64, blank=True)
+    # Set prepopulated_fields to at least slug_name
+    start = models.CharField(max_length=64,default="now-1h") # Admin: Yes
+    end = models.CharField(max_length=64,default="now") # Admin: Yes
+    def save(self, *args, **kwargs):
+        super(ViewTemplate, self).save(*args, **kwargs)
+        if not self.name:
+            self.name = str(self.start) + ' to ' + str(self.end)
+            self.slug_name = str(self.start) + '_to_' + str(self.end)
+        super(ViewTemplate, self).save(*args, **kwargs)
 
 # TODO: Schematize the whole LineDef -> DataDef -> Graph structure as the BACKEND should see it
 class DataDef(models.Model): # Admin: Yes + as inline of Graph
     graph = models.ForeignKey(Graph) # Admin: Yes (not in inline)
     data_source = models.ForeignKey(DataSource) # Admin: Yes (in the graph inline, altered by the javascript code in graph.service widget)
-    # TODO: Auto lines
+    def save(self, *args, **kwargs):
+        super(DataDef, self).save(*args, **kwargs)
+        if not self.data_def_set:
+            n = LineDef()
+            n.data_def = self
+
+            import random
+            colors = (r, g, b)
+            for c in colors:
+                c = hex(random.randrange(0,255))
+            n.color = '#' + str(r) + str(g) + str(b)
+
+            n.save()
 
 # LEVEL 4 #
 
 class LineDef(models.Model): # Admin: Yes
     data_def = models.ForeignKey(DataDef) # Admin: Yes
-    color = models.CharField(max_length=16) # Admin: Yes (This can be either a HTML color code or a named color that will be converted in the graph task)
+    color = models.CharField(max_length=16,default='#000000') # Admin: Yes (This can be either a HTML color code or a named color that will be converted in the graph task)
     width = models.PositiveSmallIntegerField(default=0.1) # Admin: Yes
