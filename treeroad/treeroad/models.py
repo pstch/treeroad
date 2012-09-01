@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.template.defaultfilters import slugify
 ### ABSTRACT MODELS ###
 # LEVEL 0 #
 
@@ -10,7 +10,8 @@ class Entity(models.Model):
 class PathPart(models.Model):
     path_part = models.CharField(max_length=64, blank=True) # Admin: Yes (But some autofilling, according to how collectd handles path computing)
     # TODO: (MAYBE) some path functions
-
+    class Meta:
+        abstract = True
 # LEVEL 1 #
 
 class AutoEntity(Entity):
@@ -21,6 +22,11 @@ class UserEntity(Entity):
     last_modified_date = models.DateTimeField(auto_now=True) # Admin: No
     highlight = models.BooleanField(default=False) # Admin: Yes
     delete_notes = models.TextField(blank=True,null=True) # Admin: Yes (Shown as a warning, if not null, when object UserEntity is deleted)
+    def __unicode__(self):
+        if hasattr(self,'name'):
+            return getattr(self,'name')
+        else:
+            return super(UserEntity, self).__str__()
     class Meta:
         abstract = True
 
@@ -36,18 +42,40 @@ class UserDescriptedEntity(UserEntity):
 
 class GenericService(AutoEntity): # Admin: If DEBUG
     name = models.CharField(max_length=64) # Admin: Yes (Parent only visible when DEBUG is True)
+    def __unicode__(self):
+        return self.name
 class Node(UserDescriptedEntity,PathPart):
     name = models.CharField(max_length=64) # Admin: Yes
+    slug_name = models.SlugField(max_length=64)
+    def save(self, *args, **kwargs):
+        if not self.slug_name:
+            self.slug_name = slugify(self.name)
+        self.path_part = self.slug_name
+        super(Node, self).save( *args, **kwargs)
 
+    def serviceCount(self):
+        return self
+    serviceCount.short_description = 'service count'
 # LEVEL 1 #
 
 class Service(UserDescriptedEntity,PathPart):
     name = models.CharField(max_length=64) # Admin: Yes
+    slug_name = models.SlugField(max_length=64)
     node = models.ForeignKey(Node) # Admin: Yes
-    generic_service = models.ForeignKey(GenericService,blank=True) # Admin: Yes (but filled automatically if empty). TODO: A text in custom widget should explain the get_or_create comportement in save().
+    generic_service = models.ForeignKey(GenericService,blank=True,null=True) # Admin: Yes (but filled automatically if empty). TODO: A text in custom widget should explain the get_or_create comportement in save().
+    def graphCount(self):
+        return self.service_set.objects.count()
     def save(self, *args, **kwargs):
         # This routine tries to get the object from GenericService.objects, and create one if it doesn't exist, based on self.name. This should ensure GenericService consistenty.
-        if not self.generic_service: self.generic_services = GenericService.objects.get_or_create(name=self.name)
+        if GenericService.objects.filter(name=self.name):
+            _gs = GenericService.objects.get(name=self.name)
+        else:
+            _gs = GenericService(name=self.name)
+        _gs.save()
+        self.generic_service = _gs
+        if not self.slug_name:
+            self.slug_name = slugify(self.name)
+        self.path_part = self.slug_name
         return super(Service, self).save(*args, **kwargs) # Classic :)
     def delete(self, *args, **kwargs):
         if not self.generic_service.service_set.exists(name!=self.name): self.generic_service.delete()
@@ -66,11 +94,14 @@ class Graph(UserDescriptedEntity,PathPart): # Admin: Yes, pathPart.path_part is 
     service = models.ForeignKey(Service) # Admin: Yes TODO: (VERY LATER) Widget should be customized in order to restrict DataSource choices in the DataDef inline, using some jQuery code.
     # TODO: Lots of graph parameters
     # TODO: Auto views
-    def save(self):
+    def dataSourceCount(self):
+        return self.graph_set.objects.count()
+    def save(self, *args, **kwargs):
         super(Graph, self).save(*args, **kwargs)
         if not self.name:
             self.name = str(self.service.name) + ' graph'
-            self.slug_name = str(self.service.name) # FIXME: Maybe slugify ?
+        if not self.slug_name:
+            self.slug_name = slugify(self.name)
         self.path_part = str(self.id) + '-' + self.slug_name
         super(Graph, self).save(*args, **kwargs)
 
@@ -100,9 +131,12 @@ class View(UserDescriptedEntity, PathPart): # Admin: Yes, pathPart.path_part is 
         super(View, self).save(*args, **kwargs)
         if not self.name:
             self.name = str(self.start) + ' to ' + str(self.end)
-            self.slug_name = str(self.start) + '_to_' + str(self.end)
+        if not self.slug_name:
+            self.slug_name = slugify(self.name)
         self.path_part = str(self.id) + '-' + str(self.slug_name)
         super(View, self).save(*args, **kwargs)
+    def __unicode__(self):
+        return self.graph.name + ' > ' + self.name
 class ViewTemplate(UserDescriptedEntity): # Admin: Yes, pathPart.path_part is ROaph
     name = models.CharField(max_length=64, blank=True) # Admin: Yes (but filled automaticcally according to start and end)
     slug_name = models.SlugField(max_length=64, blank=True)
@@ -113,6 +147,7 @@ class ViewTemplate(UserDescriptedEntity): # Admin: Yes, pathPart.path_part is RO
         super(ViewTemplate, self).save(*args, **kwargs)
         if not self.name:
             self.name = str(self.start) + ' to ' + str(self.end)
+        if not self.slug_name:
             self.slug_name = str(self.start) + '_to_' + str(self.end)
         super(ViewTemplate, self).save(*args, **kwargs)
 
